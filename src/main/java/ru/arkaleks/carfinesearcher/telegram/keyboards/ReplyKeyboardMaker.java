@@ -8,24 +8,20 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.arkaleks.carfinesearcher.telegram.constants.ButtonNameEnum.SENT_NUMBER_BUTTON;
+import static ru.arkaleks.carfinesearcher.telegram.constants.ButtonNameEnum.*;
 
 @Component
 public class ReplyKeyboardMaker {
 
     public ReplyKeyboardMarkup getMainMenuKeyboard() {
         KeyboardRow row1 = new KeyboardRow();
-
-        row1.add(new KeyboardButton(SENT_NUMBER_BUTTON.getButtonName()));
-//        row1.add(new KeyboardButton(ButtonNameEnum.REDACT_DATA_BUTTON.getButtonName()));
-//
-//        KeyboardRow row2 = new KeyboardRow();
-//        row2.add(new KeyboardButton(ButtonNameEnum.GENERATE_REPORT_BUTTON.getButtonName()));
-//        row2.add(new KeyboardButton(ButtonNameEnum.HELP_BUTTON.getButtonName()));
+        row1.add(new KeyboardButton(SENT_BUTTON.getButtonName()));
+        KeyboardRow row2 = new KeyboardRow();
+        row2.add(new KeyboardButton(HELP_BUTTON.getButtonName()));
 
         List<KeyboardRow> keyboard = new ArrayList<>();
         keyboard.add(row1);
-//        keyboard.add(row2);
+        keyboard.add(row2);
 
         final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setKeyboard(keyboard);

@@ -2,11 +2,7 @@ package ru.arkaleks.carfinesearcher.telegram.constants;
 
 public enum ButtonNameEnum {
 
-    SENT_NUMBER_BUTTON("Отправить на проверку"),
-
-    REDACT_DATA_BUTTON("Редактировать данные"),
-
-    GENERATE_REPORT_BUTTON("Сформировать отчёт"),
+    SENT_BUTTON("Отправить на проверку"),
 
     HELP_BUTTON("Помощь");
 

@@ -12,8 +12,6 @@ import org.telegram.telegrambots.starter.SpringWebhookBot;
 import ru.arkaleks.carfinesearcher.telegram.handler.CallbackQueryHandler;
 import ru.arkaleks.carfinesearcher.telegram.handler.MessageHandler;
 
-import java.io.IOException;
-
 import static ru.arkaleks.carfinesearcher.telegram.constants.BotMessageEnum.EXCEPTION_ILLEGAL_MESSAGE;
 import static ru.arkaleks.carfinesearcher.telegram.constants.BotMessageEnum.EXCEPTION_WHAT_THE_FUCK;
 
@@ -59,11 +57,11 @@ public class CarFineSearchBot extends SpringWebhookBot {
         return null;
     }
 
+
     /**
      * Метод реализует выбор перехватчика событий.
      */
-
-    private BotApiMethod<?> handleUpdate(Update update) throws IOException {
+    private BotApiMethod<?> handleUpdate(Update update) {
         if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
             return callbackQueryHandler.processCallbackQuery(callbackQuery);

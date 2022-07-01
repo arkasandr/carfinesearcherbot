@@ -9,6 +9,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.arkaleks.carfinesearcher.telegram.keyboards.ReplyKeyboardMaker;
 
 import static ru.arkaleks.carfinesearcher.telegram.constants.BotMessageEnum.HELP_MESSAGE;
+import static ru.arkaleks.carfinesearcher.telegram.constants.BotMessageEnum.SUCCESS_DATA_SENDING;
+import static ru.arkaleks.carfinesearcher.telegram.constants.ButtonNameEnum.HELP_BUTTON;
+import static ru.arkaleks.carfinesearcher.telegram.constants.ButtonNameEnum.SENT_BUTTON;
 
 
 @RequiredArgsConstructor
@@ -26,24 +29,12 @@ public class MessageHandler {
             throw new IllegalArgumentException();
         } else if (inputText.equals("/start")) {
             return getStartMessage(chatId);
-//        } else if (inputText.equals(ButtonNameEnum.SET_DATA_BUTTON.getButtonName())) {
-//            return getDataMessage(chatId);
-//        } else if (inputText.equals(ButtonNameEnum.REDACT_DATA_BUTTON.getButtonName())) {
-//            return getRedactMessage(chatId);
-//        } else if (inputText.startsWith("/newStock")){
-//            var newStock = convertStringToStock(inputText);
-//            baseService.saveStock(newStock);
-//        } else if (inputText.startsWith("/newFile")){
-//            String[] fileData = inputText.split(",");
-//            baseService.uploadFile(fileData[1]);
-//        } else if (inputText.startsWith("/delete")){
-//            String[] inputData = inputText.split(",");
-//            baseService.deleteStock(Long.valueOf(inputData[1]));
-//        } else if (inputText.startsWith("/findStock")){
-//            String[] inputData = inputText.split(",");
-//            return getStockByIdMessage(chatId, inputData[1]);
-//        } else {
-//            System.out.println("Fucking text");
+        } else if (inputText.equals(SENT_BUTTON.getButtonName())) {
+            return getDataMessage(chatId);
+        } else if (inputText.equals(HELP_BUTTON.getButtonName())) {
+            return getStartMessage(chatId);
+        } else {
+            System.out.println("Fucking text");
         }
         return null;
     }
@@ -55,21 +46,11 @@ public class MessageHandler {
         return sendMessage;
     }
 
-//    private SendMessage getDataMessage(String chatId) {
-//        SendMessage sendMessage = new SendMessage(chatId, BotMessageEnum.CHOOSE_METHOD_MESSAGE.getMessage());
-//        sendMessage.setReplyMarkup(inlineKeyboardMaker.getInlineMessageButtons("prefix", true
-//        ));
-//        return sendMessage;
-//    }
-//
-//    private SendMessage getRedactMessage(String chatId) {
-//        SendMessage sendMessage = new SendMessage(chatId, BotMessageEnum.REDACT_MENU_MESSAGE.getMessage());
-//        sendMessage.setReplyMarkup(inlineKeyboardMaker.getInlineRedactButtons("prefix"));
-//        return sendMessage;
-//    }
-//    private SendMessage getStockByIdMessage(String chatId, String stockId) {
-//        Stock stock = baseService.getStockById(Long.valueOf(stockId));
-//        SendMessage sendMessage = new SendMessage(chatId, convertStockToString(stock));
-//        return sendMessage;
-//    }
+    private SendMessage getDataMessage(String chatId) {
+        SendMessage sendMessage = new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage());
+        sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
+        return sendMessage;
+    }
+
 }
