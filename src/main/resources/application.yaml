@@ -1,0 +1,8 @@
+server:
+  port: 8060
+
+telegram:
+  url: "https://api.telegram.org/"
+  webhook: "https://0c52-46-233-221-184.eu.ngrok.io"
+  name: "CarFineSearcherBot"
+  token:
