@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import ru.arkaleks.carfinesearcher.service.MessageService;
+import ru.arkaleks.carfinesearcher.service.ValidateDataService;
 import ru.arkaleks.carfinesearcher.telegram.keyboards.ReplyKeyboardMaker;
 
-import static ru.arkaleks.carfinesearcher.telegram.constants.BotMessageEnum.HELP_MESSAGE;
-import static ru.arkaleks.carfinesearcher.telegram.constants.BotMessageEnum.SUCCESS_DATA_SENDING;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static ru.arkaleks.carfinesearcher.telegram.constants.BotMessageEnum.*;
 import static ru.arkaleks.carfinesearcher.telegram.constants.ButtonNameEnum.HELP_BUTTON;
 import static ru.arkaleks.carfinesearcher.telegram.constants.ButtonNameEnum.SENT_BUTTON;
 
@@ -20,11 +22,14 @@ import static ru.arkaleks.carfinesearcher.telegram.constants.ButtonNameEnum.SENT
 public class MessageHandler {
 
     private final ReplyKeyboardMaker keyboardMaker;
+    private final ValidateDataService validateDataService;
+    private final MessageService messageService;
 
     public BotApiMethod<?> answerMessage(Message message) {
         String chatId = message.getChatId().toString();
-        log.info("ChatId is {}", chatId);
+        log.info("ChatId is: {}", chatId);
         String inputText = message.getText();
+        log.info("Message text is: {}", inputText);
         if (inputText == null) {
             throw new IllegalArgumentException();
         } else if (inputText.equals("/start")) {
@@ -32,22 +37,31 @@ public class MessageHandler {
         } else if (inputText.equals(SENT_BUTTON.getButtonName())) {
             return getDataMessage(chatId);
         } else if (inputText.equals(HELP_BUTTON.getButtonName())) {
-            return getStartMessage(chatId);
+            return getHelpMessage(chatId);
         } else {
-            System.out.println("Fucking text");
+            SendMessage validateMessage = validateDataService.validateUserData(chatId, inputText);
+            return isBlank(validateMessage.getText())
+                    ? new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage())
+                    : validateMessage;
         }
-        return null;
     }
 
     private SendMessage getStartMessage(String chatId) {
-        SendMessage sendMessage = new SendMessage(chatId, HELP_MESSAGE.getMessage());
+        SendMessage sendMessage = new SendMessage(chatId, START_MESSAGE.getMessage());
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
         return sendMessage;
     }
 
     private SendMessage getDataMessage(String chatId) {
-        SendMessage sendMessage = new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage());
+        SendMessage sendMessage = new SendMessage(chatId, START_MESSAGE.getMessage());
+        sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
+        return sendMessage;
+    }
+
+    private SendMessage getHelpMessage(String chatId) {
+        SendMessage sendMessage = new SendMessage(chatId, HELP_MESSAGE.getMessage());
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
         return sendMessage;
