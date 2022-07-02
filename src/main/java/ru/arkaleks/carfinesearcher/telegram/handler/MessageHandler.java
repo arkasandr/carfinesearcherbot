@@ -12,8 +12,7 @@ import ru.arkaleks.carfinesearcher.telegram.keyboards.ReplyKeyboardMaker;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static ru.arkaleks.carfinesearcher.telegram.constants.BotMessageEnum.*;
-import static ru.arkaleks.carfinesearcher.telegram.constants.ButtonNameEnum.HELP_BUTTON;
-import static ru.arkaleks.carfinesearcher.telegram.constants.ButtonNameEnum.SENT_BUTTON;
+import static ru.arkaleks.carfinesearcher.telegram.constants.ButtonNameEnum.*;
 
 
 @RequiredArgsConstructor
@@ -40,6 +39,11 @@ public class MessageHandler {
             return getHelpMessage(chatId);
         } else {
             SendMessage validateMessage = validateDataService.validateUserData(chatId, inputText);
+            if (REGISTRATION_NUMBER_MESSAGE.getMessage().equals(validateMessage.getText())) {
+
+            } else if (CERTIFICATE_NUMBER_MESSAGE.getMessage().equals(validateMessage.getText())) {
+
+            }
             return isBlank(validateMessage.getText())
                     ? new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage())
                     : validateMessage;

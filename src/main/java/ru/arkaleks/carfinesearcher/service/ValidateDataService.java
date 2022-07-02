@@ -4,9 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import java.util.List;
-
-import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static ru.arkaleks.carfinesearcher.telegram.constants.BotMessageEnum.*;
 
@@ -15,6 +12,8 @@ import static ru.arkaleks.carfinesearcher.telegram.constants.BotMessageEnum.*;
 public class ValidateDataService {
 
     private static final String EMPTY = "";
+    private static final Integer REG_NUMBER_POSITION = 21;
+    private static final Integer CERT_NUMBER_POSITION = 29;
 
     public SendMessage validateUserData(String chatId, String data) {
         if (isNotBlank(data)) {
@@ -23,13 +22,13 @@ public class ValidateDataService {
                     if (data.toUpperCase().matches("^[A-Z]{1}\\d{3}[A-Z]{2}\\d{2}") ||
                             data.toUpperCase().matches("^[A-Z]{1}\\d{3}[A-Z]{2}\\d{3}")) {
                         log.info("Registration number is: {}", data.toUpperCase());
-                        return new SendMessage(chatId, REGISTRATION_NUMBER_MESSAGE.getMessage());
+                        return new SendMessage(chatId, getRegistrationNumberMessage(data.toUpperCase()));
                     }
                     return new SendMessage(chatId, WRONG_REGISTRATION_NUMBER_MESSAGE.getMessage());
                 } else {
                     if (data.toUpperCase().matches("^\\d{2}[A-Z]{2}\\d{6}")) {
                         log.info("Certificate number is: {}", data.toUpperCase());
-                        return new SendMessage(chatId, CERTIFICATE_NUMBER_MESSAGE.getMessage());
+                        return new SendMessage(chatId, getCertificateNumberMessage(data.toUpperCase()));
                     }
                 }
             }
@@ -48,4 +47,17 @@ public class ValidateDataService {
 //        }
 //        return new SendMessage(chatId, EXCEPTION_EMPTY_MESSAGE.getMessage());
     }
+
+    private String getRegistrationNumberMessage(String regNumber) {
+       return REGISTRATION_NUMBER_MESSAGE.getMessage().substring(0, REG_NUMBER_POSITION)
+                + regNumber + " "
+                + REGISTRATION_NUMBER_MESSAGE.getMessage().substring(REG_NUMBER_POSITION);
+    }
+
+    private String getCertificateNumberMessage(String certNumber) {
+        return CERTIFICATE_NUMBER_MESSAGE.getMessage().substring(0, CERT_NUMBER_POSITION)
+                + certNumber + " "
+                + CERTIFICATE_NUMBER_MESSAGE.getMessage().substring(CERT_NUMBER_POSITION);
+    }
+
 }
