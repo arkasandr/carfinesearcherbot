@@ -1,12 +1,12 @@
-package ru.arkaleks.carfinesearcher.config;
+package ru.arkasandr.carfinesearcher.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
-import ru.arkaleks.carfinesearcher.telegram.CarFineSearchBot;
-import ru.arkaleks.carfinesearcher.telegram.handler.CallbackQueryHandler;
-import ru.arkaleks.carfinesearcher.telegram.handler.MessageHandler;
+import ru.arkasandr.carfinesearcher.telegram.CarFineSearchBot;
+import ru.arkasandr.carfinesearcher.telegram.handler.CallbackQueryHandler;
+import ru.arkasandr.carfinesearcher.telegram.handler.MessageHandler;
 
 @Configuration
 public class TelegramClientConfig {

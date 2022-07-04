@@ -1,4 +1,4 @@
-package ru.arkaleks.carfinesearcher.telegram.keyboards;
+package ru.arkasandr.carfinesearcher.telegram.keyboards;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.arkaleks.carfinesearcher.telegram.constants.ButtonNameEnum.*;
+import static ru.arkasandr.carfinesearcher.telegram.constants.ButtonNameEnum.*;
 
 @Component
 public class ReplyKeyboardMaker {

@@ -1,4 +1,4 @@
-package ru.arkaleks.carfinesearcher.telegram;
+package ru.arkasandr.carfinesearcher.telegram;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,11 +9,11 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
-import ru.arkaleks.carfinesearcher.telegram.handler.CallbackQueryHandler;
-import ru.arkaleks.carfinesearcher.telegram.handler.MessageHandler;
+import ru.arkasandr.carfinesearcher.telegram.handler.CallbackQueryHandler;
+import ru.arkasandr.carfinesearcher.telegram.handler.MessageHandler;
 
-import static ru.arkaleks.carfinesearcher.telegram.constants.BotMessageEnum.EXCEPTION_ILLEGAL_MESSAGE;
-import static ru.arkaleks.carfinesearcher.telegram.constants.BotMessageEnum.EXCEPTION_WHAT_THE_FUCK;
+import static ru.arkasandr.carfinesearcher.telegram.constants.BotMessageEnum.EXCEPTION_ILLEGAL_MESSAGE;
+import static ru.arkasandr.carfinesearcher.telegram.constants.BotMessageEnum.EXCEPTION_WHAT_THE_FUCK;
 
 @Getter
 @Setter

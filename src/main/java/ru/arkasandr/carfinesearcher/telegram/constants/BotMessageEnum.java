@@ -1,4 +1,4 @@
-package ru.arkaleks.carfinesearcher.telegram.constants;
+package ru.arkasandr.carfinesearcher.telegram.constants;
 
 public enum BotMessageEnum {
 

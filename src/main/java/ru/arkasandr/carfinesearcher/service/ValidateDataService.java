@@ -1,11 +1,11 @@
-package ru.arkaleks.carfinesearcher.service;
+package ru.arkasandr.carfinesearcher.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static ru.arkaleks.carfinesearcher.telegram.constants.BotMessageEnum.*;
+import static ru.arkasandr.carfinesearcher.telegram.constants.BotMessageEnum.*;
 
 @Service
 @Slf4j

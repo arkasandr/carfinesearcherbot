@@ -1,4 +1,4 @@
-package ru.arkaleks.carfinesearcher.telegram.handler;
+package ru.arkasandr.carfinesearcher.telegram.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -1,0 +1,82 @@
+databaseChangeLog:
+  - preConditions:
+      - runningAs:
+          username: postgres
+
+  - changeSet:
+      id: 1
+      author: Arkasandr
+      changes:
+        - createTable:
+            tableName: CHAT
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: chat_id
+                  type: bigint
+              - column:
+                  name: first_name
+                  type: varchar(128)
+                  remarks: Имя пользователя
+              - column:
+                  name: last_name
+                  type: varchar(128)
+                  remarks: Фамилия пользователя
+              - column:
+                  name: user_name
+                  type: varchar(128)
+                  remarks: Псевдоним
+
+        - createTable:
+            tableName: CAR
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: registration_number
+                  type: varchar(32)
+                  remarks: регистрационный знак ТС
+              - column:
+                  name: certificate_number
+                  type: varchar(32)
+                  remarks: свидетельство о регистрации ТС
+              - column:
+                  name: chat_id
+                  type: bigint
+                  constraints:
+                    references: chat(id)
+                    foreignKeyName: fk_chat_to_car
+
+        - createTable:
+            tableName: FINE
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: value
+                  type: float8
+                  remarks: Величина штрафа
+              - column:
+                  name: receipt_date
+                  type: datetime
+                  remarks: Дата получения штрафа
+              - column:
+                  name: car_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    references: car(id)
+                    foreignKeyName: fk_car_to_fine
