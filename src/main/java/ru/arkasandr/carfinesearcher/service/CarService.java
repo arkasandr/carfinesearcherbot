@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.arkasandr.carfinesearcher.model.Car;
 import ru.arkasandr.carfinesearcher.repository.CarRepository;
 
-import javax.persistence.EntityNotFoundException;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -16,20 +16,25 @@ public class CarService {
 
     private final CarRepository carRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Car save(Car car) {
         return carRepository.save(car);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Car findCarByRegistrationNumber(String registrationNumber) {
         return carRepository.findByRegistrationNumber(registrationNumber)
                 .orElse(null);
     }
 
-    @Transactional
-    public Car findCarByChatIdAndCertificateNumberIsNull(Long chatId, String certificateNumber) {
-        return carRepository.findCarByChatIdAndCertificateNumberIsNull(chatId)
+    @Transactional(readOnly = true)
+    public Car findCarByChatIdAndCertificateNumberIsNull(Long id) {
+        return carRepository.findCarByChatIdAndCertificateNumberIsNull(id)
                 .orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public Set<Long> findCarIdsWithFullData(Long id) {
+        return carRepository.findCarIdsWithFullData(id);
     }
 }
