@@ -11,7 +11,6 @@ import static ru.arkasandr.carfinesearcher.telegram.constants.BotMessageEnum.*;
 @Slf4j
 public class ValidateDataService {
 
-    private static final String EMPTY = "";
     private static final Integer REG_NUMBER_POSITION = 21;
     private static final Integer CERT_NUMBER_POSITION = 29;
 
@@ -35,17 +34,6 @@ public class ValidateDataService {
             return new SendMessage(chatId, EXCEPTION_WRONG_MESSAGE.getMessage());
         }
         return new SendMessage(chatId, EXCEPTION_EMPTY_MESSAGE.getMessage());
-
-
-//            List<String> dataParts = asList(data.split("[\\p{Punct}\\s]+"));
-//            if (dataParts.size() > 2) {
-//                return new SendMessage(chatId, EXCEPTION_TOO_LONG_MESSAGE.getMessage());
-//            } else if (dataParts.size() == 1) {
-//                return new SendMessage(chatId, EXCEPTION_TOO_SHORT_MESSAGE.getMessage());
-//            }
-//            return new SendMessage(chatId, EMPTY);
-//        }
-//        return new SendMessage(chatId, EXCEPTION_EMPTY_MESSAGE.getMessage());
     }
 
     private String getRegistrationNumberMessage(String regNumber) {

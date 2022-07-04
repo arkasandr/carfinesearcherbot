@@ -2,7 +2,7 @@ package ru.arkasandr.carfinesearcher.telegram.constants;
 
 public enum ButtonNameEnum {
 
-    SENT_BUTTON("Отправить на проверку"),
+    SENT_BUTTON("Отправить запрос"),
 
     HELP_BUTTON("Помощь");
 

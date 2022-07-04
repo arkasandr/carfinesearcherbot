@@ -2,8 +2,7 @@ package ru.arkasandr.carfinesearcher.telegram.constants;
 
 public enum BotMessageEnum {
 
-    EXCEPTION_ILLEGAL_MESSAGE("Умею читать только текст"),
-    EXCEPTION_WHAT_THE_FUCK("Что-то пошло не так. Обратитесь к разработчику"),
+
     START_MESSAGE("Введите и отправьте регистрационный знак ТС в формате: А000АА777, а затем введите и отправьте свидетельство о регистрации ТС в формате: 99АА999999"),
     SUCCESS_DATA_SENDING("Запрос успешно отправлен!"),
     HELP_MESSAGE("Нужно придумать хэлп"),
@@ -11,11 +10,10 @@ public enum BotMessageEnum {
     CERTIFICATE_NUMBER_MESSAGE("Cвидетельство о регистрации  принято. Для продолжения нажмите \"Отправить запрос\""),
     WRONG_REGISTRATION_NUMBER_MESSAGE("Регистрационный знак ТС введен неверно. Необходимый формат: А000АА777"),
 
-
+    EXCEPTION_ILLEGAL_MESSAGE("Умею читать только текст"),
+    EXCEPTION_WHAT_THE_FUCK("Что-то пошло не так. Обратитесь к разработчику"),
     EXCEPTION_EMPTY_MESSAGE("Вы отправили пустое сообщение!"),
-    EXCEPTION_TOO_LONG_MESSAGE("Вы отправили больше данных, чем требуется!"),
-    EXCEPTION_WRONG_MESSAGE("Вы отправили некорректные данные! Попробуйте еще раз!"),
-    EXCEPTION_TOO_SHORT_MESSAGE("Вы отправили недостаточно информации!");
+    EXCEPTION_WRONG_MESSAGE("Вы отправили некорректные данные! Попробуйте еще раз!");
 
     private final String message;
 
