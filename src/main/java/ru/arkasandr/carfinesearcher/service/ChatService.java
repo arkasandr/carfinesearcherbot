@@ -10,8 +10,6 @@ import ru.arkasandr.carfinesearcher.repository.ChatRepository;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
-
 import static java.util.Objects.isNull;
 
 @Service
@@ -37,7 +35,7 @@ public class ChatService {
     @Transactional(readOnly = true)
     public Chat findChatByChatId(String chatId) {
         return chatRepository.findChatByChatId(Long.valueOf(chatId))
-                .orElseThrow(() -> new EntityNotFoundException("Не найден чат с chatId = " + chatId));
+                .orElse(null);
     }
 
 
