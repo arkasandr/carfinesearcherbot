@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
 
-    @Query(nativeQuery = true, value = " select * from chat ch " +
-            " where ch.chat_id = :chatId ")
+    @Query(nativeQuery = true, value = " select * from chat ch "
+            + " where ch.chat_id = :chatId ")
     Optional<Chat> findChatByChatId(@Param("chatId") Long chatId);
 }

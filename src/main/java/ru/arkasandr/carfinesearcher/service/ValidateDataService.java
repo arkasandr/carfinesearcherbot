@@ -18,8 +18,8 @@ public class ValidateDataService {
         if (isNotBlank(data)) {
             if (data.length() == 8 || data.length() == 9 || data.length() == 10) {
                 if (data.length() == 8 || data.length() == 9) {
-                    if (data.toUpperCase().matches("^[A-ZА-Я]{1}\\d{3}[A-ZА-Я]{2}\\d{2}") ||
-                            data.toUpperCase().matches("^[A-ZА-Я]{1}\\d{3}[A-ZА-Я]{2}\\d{3}")) {
+                    if (data.toUpperCase().matches("^[A-ZА-Я]{1}\\d{3}[A-ZА-Я]{2}\\d{2}")
+                            || data.toUpperCase().matches("^[A-ZА-Я]{1}\\d{3}[A-ZА-Я]{2}\\d{3}")) {
                         log.info("Registration number is: {}", data.toUpperCase());
                         return new SendMessage(chatId, getRegistrationNumberMessage(data.toUpperCase()));
                     }

@@ -14,16 +14,20 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     Optional<Car> findByRegistrationNumber(String registrationNumber);
 
-    @Query(nativeQuery = true, value = " select * from car c " +
-            " left join chat ch on c.chat_id = ch.id " +
-            " where c.chat_id = :id " +
-            " and c.certificate_number is null")
+    @Query(nativeQuery = true, value = " select * from car c "
+            + " left join chat ch on c.chat_id = ch.id "
+            + " where c.chat_id = :id "
+            + " and c.certificate_number is null")
     Optional<Car> findCarByChatIdAndCertificateNumberIsNull(@Param("id") Long id);
 
-    @Query(nativeQuery = true, value = " select c.id from car c " +
-            " left join chat ch on c.chat_id = ch.id " +
-            " where c.chat_id = :id " +
-            " and c.registration_number is not null " +
-            " and c.certificate_number is not null")
+    @Query(nativeQuery = true, value = " select c.id from car c "
+            + " left join chat ch on c.chat_id = ch.id "
+            + " where c.chat_id = :id "
+            + " and c.registration_number is not null "
+            + " and c.certificate_number is not null")
     Set<Long> findCarIdsWithFullData(@Param("id") Long id);
+
+    @Query(nativeQuery = true, value = " select * from car c "
+            + " where c.certificate_number is null")
+    Optional<Car> findCarWithoutCertificateNumber();
 }

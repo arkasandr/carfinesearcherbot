@@ -37,4 +37,9 @@ public class CarService {
     public Set<Long> findCarIdsWithFullData(Long id) {
         return carRepository.findCarIdsWithFullData(id);
     }
+    @Transactional(readOnly = true)
+    public Car findCarWithoutCertificateNumber() {
+        return carRepository.findCarWithoutCertificateNumber()
+                .orElse(null);
+    }
 }

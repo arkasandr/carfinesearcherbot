@@ -50,12 +50,17 @@ public class MessageHandler {
         } else {
             SendMessage validateMessage = validateDataService.validateUserData(chatId, inputText);
             if (validateMessage.getText().startsWith(REGISTRATION_NUMBER_MESSAGE.getMessage().substring(0, 8))) {
-                var car = carService.findCarByRegistrationNumber(inputText);
-                if (isNull(car)) {
-                    chatService.saveRegistrationNumber(chat, inputText);
-                    log.info("RegistrationNumber is: {}", inputText);
+                var existCarWithoutCertificateNumber = carService.findCarWithoutCertificateNumber();
+                if(isNull(existCarWithoutCertificateNumber)) {
+                    var existCar = carService.findCarByRegistrationNumber(inputText);
+                    if (isNull(existCar)) {
+                        chatService.saveRegistrationNumber(chat, inputText);
+                        log.info("RegistrationNumber is: {}", inputText);
+                    } else {
+                        validateMessage = new SendMessage(chatId, EXCEPTION_EXISTING_REGISTRATION_NUMBER.getMessage());
+                    }
                 } else {
-                    validateMessage = new SendMessage(chatId, EXCEPTION_EXISTING_REGISTRATION_NUMBER.getMessage());
+                    validateMessage = new SendMessage(chatId, EXCEPTION_EXISTING_REQUEST.getMessage());
                 }
 
             } else if (validateMessage.getText().startsWith(CERTIFICATE_NUMBER_MESSAGE.getMessage().substring(0, 8))) {

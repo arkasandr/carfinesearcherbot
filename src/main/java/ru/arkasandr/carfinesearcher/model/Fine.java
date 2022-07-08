@@ -20,7 +20,7 @@ public class Fine {
 
     private Double value;
 
-    private LocalDateTime receipt_date;
+    private LocalDateTime receiptDate;
 
     @ManyToOne
     @JoinColumn(name = "car_id")
