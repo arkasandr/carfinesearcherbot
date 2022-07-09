@@ -5,7 +5,7 @@ telegram:
   url: "https://api.telegram.org/"
   webhook: ${BOT_WEBHOOK:"https://0c52-46-233-221-184.eu.ngrok.io"}
   name: "CarFineSearcherBot"
-  token: ${BOT_TOKEN:"5474369597:AAFH48Nx4VXbs5x64fDb-2fWeSGiIWo2AnM"}
+  token: ${BOT_TOKEN:}
 
 spring:
   jpa:
