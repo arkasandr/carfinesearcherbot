@@ -24,12 +24,10 @@ import static ru.arkasandr.carfinesearcher.telegram.constants.ButtonNameEnum.SEN
 @Slf4j
 @Service
 public class MessageHandler {
-
     private final ReplyKeyboardMaker keyboardMaker;
     private final ValidateDataService validateDataService;
     private final ChatService chatService;
     private final CarService carService;
-
     private final RequestProcessService requestProcessService;
 
     public BotApiMethod<?> answerMessage(Message message) {
@@ -66,9 +64,9 @@ public class MessageHandler {
                 }
 
             } else if (validateMessage.getText().startsWith(CERTIFICATE_NUMBER_MESSAGE.getMessage().substring(0, 8))) {
-                var car = carService.findCarByChatIdAndCertificateNumberIsNull(chat.getId());
-                if (!isNull(car)) {
-                    chatService.saveCertificateNumber(chat, car, inputText);
+                var existCar = carService.findCarByChatIdAndCertificateNumberIsNull(chat.getId());
+                if (!isNull(existCar)) {
+                    chatService.saveCertificateNumber(chat, existCar, inputText);
                     log.info("CertificateNumber is: {}", inputText);
                 } else {
                     validateMessage = isNull(carService.findCarIdsWithFullData(chat.getId()))

@@ -18,7 +18,6 @@ import static java.util.Objects.isNull;
 public class RequestProcessService {
 
     private final CarRepository carRepository;
-
     private final GibddRequestRepository requestRepository;
 
 

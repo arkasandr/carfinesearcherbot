@@ -19,11 +19,13 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             + " and c.certificate_number is null")
     Optional<Car> findCarByChatIdAndCertificateNumberIsNull(@Param("id") Long id);
 
-    @Query(nativeQuery = true, value = " select c.id from car c "
-            + " left join chat ch on c.chat_id = ch.id "
-            + " where c.chat_id = :id "
-            + " and c.registration_number is not null "
-            + " and c.certificate_number is not null")
+    @Query(value = " select c.id from Car c "
+            + " left join c.chat ch "
+            + " left join c.request r "
+            + " where ch.id = :id "
+            + " and c.registrationNumber is not null "
+            + " and c.certificateNumber is not null "
+            + " and r.status != ?#{T(ru.arkasandr.carfinesearcher.model.enums.RequestStatus).SENDING}")
     Long findCarIdsWithFullData(@Param("id") Long id);
 
     @Query(nativeQuery = true, value = " select * from car c "

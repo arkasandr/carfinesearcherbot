@@ -7,7 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.arkasandr.carfinesearcher.model.Car;
 import ru.arkasandr.carfinesearcher.model.Chat;
+import ru.arkasandr.carfinesearcher.model.GibddRequest;
+import ru.arkasandr.carfinesearcher.model.enums.RequestStatus;
 import ru.arkasandr.carfinesearcher.repository.ChatRepository;
+import ru.arkasandr.carfinesearcher.repository.GibddRequestRepository;
+
+import static java.time.LocalDateTime.now;
 
 @Service
 @Slf4j
@@ -15,8 +20,8 @@ import ru.arkasandr.carfinesearcher.repository.ChatRepository;
 public class ChatService {
 
     private final ChatRepository chatRepository;
-
     private final CarService carService;
+    private final GibddRequestRepository gibddRequestRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public Chat saveChatFromMessage(Message message) {
@@ -50,6 +55,12 @@ public class ChatService {
     public void saveCertificateNumber(Chat chat, Car car, String certificateNumber) {
         car.setCertificateNumber(certificateNumber);
         car.setChat(chat);
+        var newRequest = GibddRequest.builder()
+                .requestDate(now())
+                .status(RequestStatus.READY_FOR_SEND)
+                .build();
+        gibddRequestRepository.save(newRequest);
+        car.setRequest(newRequest);
         carService.save(car);
     }
 }
