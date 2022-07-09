@@ -9,12 +9,12 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.arkasandr.carfinesearcher.model.Chat;
 import ru.arkasandr.carfinesearcher.service.CarService;
 import ru.arkasandr.carfinesearcher.service.ChatService;
+import ru.arkasandr.carfinesearcher.service.RequestProcessService;
 import ru.arkasandr.carfinesearcher.service.ValidateDataService;
 import ru.arkasandr.carfinesearcher.telegram.keyboards.ReplyKeyboardMaker;
 
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.springframework.util.CollectionUtils.isEmpty;
 import static ru.arkasandr.carfinesearcher.telegram.constants.BotMessageEnum.*;
 import static ru.arkasandr.carfinesearcher.telegram.constants.ButtonNameEnum.HELP_BUTTON;
 import static ru.arkasandr.carfinesearcher.telegram.constants.ButtonNameEnum.SENT_BUTTON;
@@ -29,6 +29,8 @@ public class MessageHandler {
     private final ValidateDataService validateDataService;
     private final ChatService chatService;
     private final CarService carService;
+
+    private final RequestProcessService requestProcessService;
 
     public BotApiMethod<?> answerMessage(Message message) {
         String chatId = message.getChatId().toString();
@@ -51,7 +53,7 @@ public class MessageHandler {
             SendMessage validateMessage = validateDataService.validateUserData(chatId, inputText);
             if (validateMessage.getText().startsWith(REGISTRATION_NUMBER_MESSAGE.getMessage().substring(0, 8))) {
                 var existCarWithoutCertificateNumber = carService.findCarWithoutCertificateNumber();
-                if(isNull(existCarWithoutCertificateNumber)) {
+                if (isNull(existCarWithoutCertificateNumber)) {
                     var existCar = carService.findCarByRegistrationNumber(inputText);
                     if (isNull(existCar)) {
                         chatService.saveRegistrationNumber(chat, inputText);
@@ -69,7 +71,7 @@ public class MessageHandler {
                     chatService.saveCertificateNumber(chat, car, inputText);
                     log.info("CertificateNumber is: {}", inputText);
                 } else {
-                    validateMessage = isEmpty(carService.findCarIdsWithFullData(chat.getId()))
+                    validateMessage = isNull(carService.findCarIdsWithFullData(chat.getId()))
                             ? new SendMessage(chatId, EXCEPTION_CERTIFICATE_BEFORE_REGISTRATION.getMessage())
                             : new SendMessage(chatId, READY_DATA_MESSAGE.getMessage());
                 }
@@ -88,9 +90,10 @@ public class MessageHandler {
     }
 
     private SendMessage getDataMessage(Chat chat, String chatId) {
-        var sendMessage = isEmpty(carService.findCarIdsWithFullData(chat.getId()))
+        var carId = carService.findCarIdsWithFullData(chat.getId());
+        var sendMessage = isNull(carId)
                 ? new SendMessage(chatId, START_MESSAGE.getMessage())
-                : new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage());
+                : sendRequestToPlatform(chatId, carId);
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
         return sendMessage;
@@ -101,6 +104,11 @@ public class MessageHandler {
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
         return sendMessage;
+    }
+
+    private SendMessage sendRequestToPlatform(String chatId, Long id) {
+        var sendingRequest = requestProcessService.sendRequest(id);
+        return new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage());
     }
 
 }

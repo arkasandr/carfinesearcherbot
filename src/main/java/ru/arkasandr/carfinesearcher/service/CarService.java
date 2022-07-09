@@ -7,8 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.arkasandr.carfinesearcher.model.Car;
 import ru.arkasandr.carfinesearcher.repository.CarRepository;
 
-import java.util.Set;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -34,9 +32,10 @@ public class CarService {
     }
 
     @Transactional(readOnly = true)
-    public Set<Long> findCarIdsWithFullData(Long id) {
+    public Long findCarIdsWithFullData(Long id) {
         return carRepository.findCarIdsWithFullData(id);
     }
+
     @Transactional(readOnly = true)
     public Car findCarWithoutCertificateNumber() {
         return carRepository.findCarWithoutCertificateNumber()

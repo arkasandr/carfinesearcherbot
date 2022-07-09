@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - preConditions:
+      - runningAs:
+          username: postgres
+
+  - changeSet:
+      id: 2
+      author: Arkasandr
+      changes:
+        - createTable:
+            tableName: GIBDD_REQUEST
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: request_date
+                  type: datetime
+                  remarks: дата отправки запроса
+              - column:
+                  name: response_date
+                  type: datetime
+                  remarks: дата получения ответа
+              - column:
+                  name: status
+                  type: varchar(128)
+
+
+        - addColumn:
+            tableName: car
+            columns:
+              - column:
+                 name: gibdd_request_id
+                 type: bigint
+                 constraints:
+                   references: gibdd_request(id)
+                   foreignKeyName: fk_gibdd_request_to_car

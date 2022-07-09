@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: db/changelog/changes/20220704124800__add_chat_car_fine_request_tables.yaml
+  - include:
+      file: db/changelog/changes/20220708141000__add_request_table.yaml

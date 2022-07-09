@@ -30,4 +30,9 @@ public class Car {
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     Set<Fine> carFines;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gibdd_request_id")
+    private GibddRequest request;
+
 }

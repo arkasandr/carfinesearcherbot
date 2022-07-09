@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import ru.arkasandr.carfinesearcher.model.Car;
 
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
@@ -25,7 +24,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             + " where c.chat_id = :id "
             + " and c.registration_number is not null "
             + " and c.certificate_number is not null")
-    Set<Long> findCarIdsWithFullData(@Param("id") Long id);
+    Long findCarIdsWithFullData(@Param("id") Long id);
 
     @Query(nativeQuery = true, value = " select * from car c "
             + " where c.certificate_number is null")
