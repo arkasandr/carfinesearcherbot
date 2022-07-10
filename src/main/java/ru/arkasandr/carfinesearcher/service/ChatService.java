@@ -47,8 +47,6 @@ public class ChatService {
                 .chat(chat)
                 .build();
         carService.save(car);
-//        var request = GibddRequest.builder().car(car).build();
-//        gibddRequestRepository.save(request);
     }
 
     @Transactional(rollbackFor = Exception.class)
