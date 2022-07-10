@@ -1,9 +1,6 @@
 package ru.arkasandr.carfinesearcher.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -12,6 +9,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = "request")
 @Entity
 @Table(name = "CAR")
 public class Car {
@@ -31,8 +29,16 @@ public class Car {
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     Set<Fine> carFines;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gibdd_request_id")
+    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
     private GibddRequest request;
 
+    @Override
+    public String toString() {
+        return "Car{"
+                + "id=" + id
+                + ", registrationNumber='" + registrationNumber + '\''
+                + ", certificateNumber='" + certificateNumber + '\''
+                + '}';
+    }
 }

@@ -11,6 +11,8 @@ import ru.arkasandr.carfinesearcher.repository.GibddRequestRepository;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Objects.isNull;
+import static java.util.Optional.ofNullable;
+import static ru.arkasandr.carfinesearcher.model.enums.RequestStatus.SENDING;
 
 @Service
 @Slf4j
@@ -22,15 +24,13 @@ public class RequestProcessService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public GibddRequest sendRequest(Long id) {
-        var newRequest = GibddRequest.builder()
-                .requestDate(now())
-                .status(RequestStatus.SENDING)
-                .build();
+    public void sendRequest(Long id) {
         var existCar = carRepository.findById(id).orElse(null);
-        if (!isNull(existCar)) {
-            existCar.setRequest(newRequest);
+        if (!isNull(existCar) && !isNull(existCar.getRequest())) {
+            var existRequest = existCar.getRequest();
+            existRequest.setRequestDate(now());
+            existRequest.setStatus(SENDING);
+            requestRepository.save(existRequest);
         }
-        return requestRepository.save(newRequest);
     }
 }

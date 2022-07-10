@@ -25,4 +25,13 @@ public class Fine {
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;
+
+    @Override
+    public String toString() {
+        return "Fine{"
+                + "id=" + id
+                + ", value=" + value
+                + ", receiptDate=" + receiptDate
+                + '}';
+    }
 }

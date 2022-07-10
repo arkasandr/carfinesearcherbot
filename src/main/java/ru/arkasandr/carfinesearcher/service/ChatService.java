@@ -40,7 +40,6 @@ public class ChatService {
                 .orElse(null);
     }
 
-
     @Transactional(rollbackFor = Exception.class)
     public void saveRegistrationNumber(Chat chat, String registrationNumber) {
         var car = Car.builder()
@@ -48,19 +47,20 @@ public class ChatService {
                 .chat(chat)
                 .build();
         carService.save(car);
+//        var request = GibddRequest.builder().car(car).build();
+//        gibddRequestRepository.save(request);
     }
-
 
     @Transactional(rollbackFor = Exception.class)
     public void saveCertificateNumber(Chat chat, Car car, String certificateNumber) {
         car.setCertificateNumber(certificateNumber);
         car.setChat(chat);
+        carService.save(car);
         var newRequest = GibddRequest.builder()
-                .requestDate(now())
+                .createDate(now())
                 .status(RequestStatus.READY_FOR_SEND)
+                .car(car)
                 .build();
         gibddRequestRepository.save(newRequest);
-        car.setRequest(newRequest);
-        carService.save(car);
     }
 }

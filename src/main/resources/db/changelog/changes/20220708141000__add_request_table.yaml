@@ -11,11 +11,9 @@ databaseChangeLog:
             tableName: GIBDD_REQUEST
             columns:
               - column:
-                  name: id
-                  type: bigint
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
+                  name: create_date
+                  type: datetime
+                  remarks: дата создания запроса
               - column:
                   name: request_date
                   type: datetime
@@ -27,14 +25,9 @@ databaseChangeLog:
               - column:
                   name: status
                   type: varchar(128)
-
-
-        - addColumn:
-            tableName: car
-            columns:
               - column:
-                 name: gibdd_request_id
-                 type: bigint
-                 constraints:
-                   references: gibdd_request(id)
-                   foreignKeyName: fk_gibdd_request_to_car
+                  name: car_id
+                  type: bigint
+                  constraints:
+                    references: car(id)
+                    foreignKeyName: fk_gibdd_request_to_car

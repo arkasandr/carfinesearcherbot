@@ -105,7 +105,7 @@ public class MessageHandler {
     }
 
     private SendMessage sendRequestToPlatform(String chatId, Long id) {
-        var sendingRequest = requestProcessService.sendRequest(id);
+        requestProcessService.sendRequest(id);
         return new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage());
     }
 

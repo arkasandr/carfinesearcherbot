@@ -30,5 +30,14 @@ public class Chat {
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
     Set<Car> chatCars;
 
-
+    @Override
+    public String toString() {
+        return "Chat{"
+                + "id=" + id
+                + ", chatId=" + chatId
+                + ", firstName='" + firstName + '\''
+                + ", lastName='" + lastName + '\''
+                + ", userName='" + userName + '\''
+                + '}';
+    }
 }
