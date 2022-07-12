@@ -29,6 +29,7 @@ public class ValidateDataService {
                         log.info("Certificate number is: {}", data.toUpperCase());
                         return new SendMessage(chatId, getCertificateNumberMessage(data.toUpperCase()));
                     }
+                    return new SendMessage(chatId, WRONG_CERTIFICATE_NUMBER_MESSAGE.getMessage());
                 }
             }
             return new SendMessage(chatId, EXCEPTION_WRONG_MESSAGE.getMessage());

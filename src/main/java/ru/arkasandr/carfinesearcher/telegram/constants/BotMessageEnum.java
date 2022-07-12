@@ -9,6 +9,7 @@ public enum BotMessageEnum {
     REGISTRATION_NUMBER_MESSAGE("Регистрационный знак принят. Введите и отправьте свидетельство о регистрации ТС в формате: 99АА999999"),
     CERTIFICATE_NUMBER_MESSAGE("Cвидетельство о регистрации принято. Для продолжения нажмите \"Отправить запрос\""),
     WRONG_REGISTRATION_NUMBER_MESSAGE("Неверный ввод! Необходимый формат: А000АА777"),
+    WRONG_CERTIFICATE_NUMBER_MESSAGE("Неверный ввод! Необходимый формат: 99АА999999"),
     READY_DATA_MESSAGE("Все данные приняты. Для продолжения нажмите \"Отправить запрос\""),
 
     EXCEPTION_ILLEGAL_MESSAGE("Умею читать только текст."),
