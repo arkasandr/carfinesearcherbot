@@ -18,14 +18,14 @@ public class ValidateDataService {
         if (isNotBlank(data)) {
             if (data.length() == 8 || data.length() == 9 || data.length() == 10) {
                 if (data.length() == 8 || data.length() == 9) {
-                    if (data.toUpperCase().matches("^[A-ZА-Я]{1}\\d{3}[A-ZА-Я]{2}\\d{2}")
-                            || data.toUpperCase().matches("^[A-ZА-Я]{1}\\d{3}[A-ZА-Я]{2}\\d{3}")) {
+                    if (data.toUpperCase().matches("^[ABCEHKMOPTYXАВЕКМНОРСТУХ]{1}\\d{3}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{2}")
+                            || data.toUpperCase().matches("^[ABCEHKMOPTYXАВЕКМНОРСТУХ]{1}\\d{3}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{3}")) {
                         log.info("Registration number is: {}", data.toUpperCase());
                         return new SendMessage(chatId, getRegistrationNumberMessage(data.toUpperCase()));
                     }
                     return new SendMessage(chatId, WRONG_REGISTRATION_NUMBER_MESSAGE.getMessage());
                 } else {
-                    if (data.toUpperCase().matches("^\\d{2}[A-ZА-Я]{2}\\d{6}")) {
+                    if (data.toUpperCase().matches("^\\d{2}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{6}")) {
                         log.info("Certificate number is: {}", data.toUpperCase());
                         return new SendMessage(chatId, getCertificateNumberMessage(data.toUpperCase()));
                     }
