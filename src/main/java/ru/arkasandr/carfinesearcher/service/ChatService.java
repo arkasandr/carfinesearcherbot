@@ -12,6 +12,8 @@ import ru.arkasandr.carfinesearcher.model.enums.RequestStatus;
 import ru.arkasandr.carfinesearcher.repository.ChatRepository;
 import ru.arkasandr.carfinesearcher.repository.GibddRequestRepository;
 
+import javax.persistence.EntityNotFoundException;
+
 import static java.time.LocalDateTime.now;
 
 @Service
@@ -37,7 +39,7 @@ public class ChatService {
     @Transactional(readOnly = true)
     public Chat findChatByChatId(String chatId) {
         return chatRepository.findChatByChatId(Long.valueOf(chatId))
-                .orElse(null);
+                .orElseThrow(() -> new EntityNotFoundException("Запись о ТС с id = " + chatId + " отсутствует!"));
     }
 
     @Transactional(rollbackFor = Exception.class)
