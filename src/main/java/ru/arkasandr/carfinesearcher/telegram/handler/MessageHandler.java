@@ -24,6 +24,9 @@ import static ru.arkasandr.carfinesearcher.telegram.constants.ButtonNameEnum.SEN
 @Slf4j
 @Service
 public class MessageHandler {
+
+    private static final String USER_START = "/start";
+
     private final ReplyKeyboardMaker keyboardMaker;
     private final ValidateDataService validateDataService;
     private final ChatService chatService;
@@ -41,7 +44,7 @@ public class MessageHandler {
         log.info("Message text is: {}", inputText);
         if (inputText == null) {
             throw new IllegalArgumentException();
-        } else if (inputText.equals("/start")) {
+        } else if (inputText.equals(USER_START)) {
             return getStartMessage(chatId);
         } else if (inputText.equals(SENT_BUTTON.getButtonName())) {
             return getDataMessage(chat, chatId);
