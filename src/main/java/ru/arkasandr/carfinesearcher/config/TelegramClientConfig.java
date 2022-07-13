@@ -26,7 +26,7 @@ public class TelegramClientConfig {
     }
 
     @Bean
-    public CarFineSearchBot springWebookBot(SetWebhook setWebhook,
+    public CarFineSearchBot springWebhookBot(SetWebhook setWebhook,
                                             MessageHandler messageHandler,
                                             CallbackQueryHandler callbackQueryHandler) {
         CarFineSearchBot bot = new CarFineSearchBot(setWebhook, messageHandler, callbackQueryHandler);

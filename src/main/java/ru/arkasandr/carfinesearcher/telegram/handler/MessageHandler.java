@@ -50,29 +50,9 @@ public class MessageHandler {
         } else {
             SendMessage validateMessage = validateDataService.validateUserData(chatId, inputText);
             if (validateMessage.getText().startsWith(REGISTRATION_NUMBER_MESSAGE.getMessage().substring(0, 8))) {
-                var existCarWithoutCertificateNumber = carService.findCarWithoutCertificateNumber();
-                if (isNull(existCarWithoutCertificateNumber)) {
-                    var existCar = carService.findCarByRegistrationNumber(inputText);
-                    if (isNull(existCar)) {
-                        chatService.saveRegistrationNumber(chat, inputText);
-                        log.info("RegistrationNumber is: {}", inputText);
-                    } else {
-                        validateMessage = new SendMessage(chatId, EXCEPTION_EXISTING_REGISTRATION_NUMBER.getMessage());
-                    }
-                } else {
-                    validateMessage = new SendMessage(chatId, EXCEPTION_EXISTING_REQUEST.getMessage());
-                }
-
+                validateMessage = processRegistrationNumber(chat, chatId, inputText);
             } else if (validateMessage.getText().startsWith(CERTIFICATE_NUMBER_MESSAGE.getMessage().substring(0, 8))) {
-                var existCar = carService.findCarByChatIdAndCertificateNumberIsNull(chat.getId());
-                if (!isNull(existCar)) {
-                    chatService.saveCertificateNumber(chat, existCar, inputText);
-                    log.info("CertificateNumber is: {}", inputText);
-                } else {
-                    validateMessage = isNull(carService.findCarIdsWithFullData(chat.getId()))
-                            ? new SendMessage(chatId, EXCEPTION_CERTIFICATE_BEFORE_REGISTRATION.getMessage())
-                            : new SendMessage(chatId, READY_DATA_MESSAGE.getMessage());
-                }
+                validateMessage = processCertificateNumber(chat, chatId, inputText);
             }
             return isBlank(validateMessage.getText())
                     ? new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage())
@@ -109,4 +89,34 @@ public class MessageHandler {
         return new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage());
     }
 
+    private SendMessage processRegistrationNumber(Chat chat, String chatId, String inputText) {
+        SendMessage result = new SendMessage();
+        var existCarWithoutCertificateNumber = carService.findCarWithoutCertificateNumber();
+        if (isNull(existCarWithoutCertificateNumber)) {
+            var existCar = carService.findCarByRegistrationNumber(inputText);
+            if (isNull(existCar)) {
+                chatService.saveRegistrationNumber(chat, inputText);
+                log.info("RegistrationNumber is: {}", inputText);
+            } else {
+                result = new SendMessage(chatId, EXCEPTION_EXISTING_REGISTRATION_NUMBER.getMessage());
+            }
+        } else {
+            result = new SendMessage(chatId, EXCEPTION_EXISTING_REQUEST.getMessage());
+        }
+        return result;
+    }
+
+    private SendMessage processCertificateNumber(Chat chat, String chatId, String inputText) {
+        SendMessage result = new SendMessage();
+        var existCar = carService.findCarByChatIdAndCertificateNumberIsNull(chat.getId());
+        if (!isNull(existCar)) {
+            chatService.saveCertificateNumber(chat, existCar, inputText);
+            log.info("CertificateNumber is: {}", inputText);
+        } else {
+            result = isNull(carService.findCarIdsWithFullData(chat.getId()))
+                    ? new SendMessage(chatId, EXCEPTION_CERTIFICATE_BEFORE_REGISTRATION.getMessage())
+                    : new SendMessage(chatId, READY_DATA_MESSAGE.getMessage());
+        }
+        return result;
+    }
 }
