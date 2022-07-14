@@ -26,7 +26,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             + " and c.registrationNumber is not null "
             + " and c.certificateNumber is not null "
             + " and r.status != ?#{T(ru.arkasandr.carfinesearcher.model.enums.RequestStatus).SENDING}")
-    Long findCarIdsWithFullDataNotInSendingStatus(@Param("id") Long id);
+    Long findCarIdWithFullDataAndNotInSendingStatus(@Param("id") Long id);
 
     @Query(nativeQuery = true, value = " select * from car c "
             + " where c.certificate_number is null")

@@ -71,7 +71,7 @@ public class MessageHandler {
     }
 
     private SendMessage getDataMessage(Chat chat, String chatId) {
-        var carId = carService.findCarIdsWithFullDataNotInSendingStatus(chat.getId());
+        var carId = carService.findCarIdWithFullDataAndNotInSendingStatus(chat.getId());
         var sendMessage = isNull(carId)
                 ? new SendMessage(chatId, START_MESSAGE.getMessage())
                 : sendRequestToPlatform(chatId, carId);
@@ -119,7 +119,7 @@ public class MessageHandler {
                     }
             );
         } else {
-            result = isNull(carService.findCarIdsWithFullDataNotInSendingStatus(chat.getId()))
+            result = isNull(carService.findCarIdWithFullDataAndNotInSendingStatus(chat.getId()))
                     ? new SendMessage(chatId, EXCEPTION_CERTIFICATE_BEFORE_REGISTRATION.getMessage())
                     : new SendMessage(chatId, READY_DATA_MESSAGE.getMessage());
         }
