@@ -19,24 +19,6 @@
     <version>2.7.1</version>
   </parent>
 
-
-  <profiles>
-
-    <profile>
-      <id>travis</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <db.url>jdbc:postgresql://localhost/carfinesearchbot</db.url>
-        <db.username>postgres</db.username>
-        <db.password></db.password>
-        <db.driver>org.postgresql.Driver</db.driver>
-      </properties>
-    </profile>
-  </profiles>
-
-
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
