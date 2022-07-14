@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/arkasandr/carfinesearcherbot.svg?branch=master)](https://travis-ci.org/arkasandr/carfinesearcherbot)
+[![codecov](https://codecov.io/gh/arkasandr/study/branch/master/graph/badge.svg)](https://codecov.io/gh/arkasandr/carfinesearcherbot)
+
 # carfinesearcherbot
 
 My first introduction to Telegram API. 
