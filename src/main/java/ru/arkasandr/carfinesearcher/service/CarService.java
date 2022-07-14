@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.arkasandr.carfinesearcher.model.Car;
 import ru.arkasandr.carfinesearcher.repository.CarRepository;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -20,15 +22,13 @@ public class CarService {
     }
 
     @Transactional(readOnly = true)
-    public Car findCarByRegistrationNumber(String registrationNumber) {
-        return carRepository.findByRegistrationNumber(registrationNumber)
-                .orElse(null);
+    public Optional<Car> findCarByRegistrationNumber(String registrationNumber) {
+        return carRepository.findByRegistrationNumber(registrationNumber);
     }
 
     @Transactional(readOnly = true)
-    public Car findCarByChatIdAndCertificateNumberIsNull(Long id) {
-        return carRepository.findCarByChatIdAndCertificateNumberIsNull(id)
-                .orElse(null);
+    public Optional<Car> findCarByChatIdAndCertificateNumberIsNull(Long id) {
+        return carRepository.findCarByChatIdAndCertificateNumberIsNull(id);
     }
 
     @Transactional(readOnly = true)
@@ -37,8 +37,7 @@ public class CarService {
     }
 
     @Transactional(readOnly = true)
-    public Car findCarWithoutCertificateNumber() {
-        return carRepository.findCarWithoutCertificateNumber()
-                .orElse(null);
+    public Optional<Car> findCarWithoutCertificateNumber() {
+        return carRepository.findCarWithoutCertificateNumber();
     }
 }

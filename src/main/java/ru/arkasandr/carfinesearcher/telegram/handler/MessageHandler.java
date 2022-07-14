@@ -95,9 +95,9 @@ public class MessageHandler {
     private SendMessage processRegistrationNumber(Chat chat, String chatId, String inputText) {
         SendMessage result = new SendMessage();
         var existCarWithoutCertificateNumber = carService.findCarWithoutCertificateNumber();
-        if (isNull(existCarWithoutCertificateNumber)) {
+        if (existCarWithoutCertificateNumber.isEmpty()) {
             var existCar = carService.findCarByRegistrationNumber(inputText);
-            if (isNull(existCar)) {
+            if (existCar.isEmpty()) {
                 chatService.saveRegistrationNumber(chat, inputText);
                 log.info("RegistrationNumber is: {}", inputText);
             } else {
@@ -112,9 +112,12 @@ public class MessageHandler {
     private SendMessage processCertificateNumber(Chat chat, String chatId, String inputText) {
         SendMessage result = new SendMessage();
         var existCar = carService.findCarByChatIdAndCertificateNumberIsNull(chat.getId());
-        if (!isNull(existCar)) {
-            chatService.saveCertificateNumber(chat, existCar, inputText);
-            log.info("CertificateNumber is: {}", inputText);
+        if (existCar.isPresent()) {
+            existCar.ifPresent(car -> {
+                        chatService.saveCertificateNumber(chat, car, inputText);
+                        log.info("CertificateNumber is: {}", inputText);
+                    }
+            );
         } else {
             result = isNull(carService.findCarIdsWithFullDataNotInSendingStatus(chat.getId()))
                     ? new SendMessage(chatId, EXCEPTION_CERTIFICATE_BEFORE_REGISTRATION.getMessage())
