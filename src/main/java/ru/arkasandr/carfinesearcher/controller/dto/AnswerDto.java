@@ -1,0 +1,1 @@
+package ru.arkasandr.carfinesearcher.controller.dto;import lombok.Data;@Datapublic class AnswerDto {    private Double value;}
