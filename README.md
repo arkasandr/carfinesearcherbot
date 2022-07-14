@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/arkasandr/carfinesearcherbot.svg?branch=master)](https://travis-ci.org/arkasandr/carfinesearcherbot)
+[![Java CI with Maven](https://github.com/arkasandr/carfinesearcherbot/actions/workflows/maven.yml/badge.svg)](https://github.com/arkasandr/carfinesearcherbot/actions/workflows/maven.yml)
 [![codecov](https://codecov.io/gh/arkasandr/carfinesearcherbot/branch/master/graph/badge.svg)](https://codecov.io/gh/arkasandr/carfinesearcherbot)
 
 # carfinesearcherbot
