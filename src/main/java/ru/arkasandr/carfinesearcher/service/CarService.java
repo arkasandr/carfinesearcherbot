@@ -32,8 +32,8 @@ public class CarService {
     }
 
     @Transactional(readOnly = true)
-    public Long findCarIdsWithFullData(Long id) {
-        return carRepository.findCarIdsWithFullData(id);
+    public Long findCarIdsWithFullDataNotInSendingStatus(Long id) {
+        return carRepository.findCarIdsWithFullDataNotInSendingStatus(id);
     }
 
     @Transactional(readOnly = true)
