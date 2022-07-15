@@ -1,1 +1,1 @@
-package ru.arkasandr.carfinesearcher.model;import lombok.AllArgsConstructor;import lombok.Data;import lombok.NoArgsConstructor;@Data@AllArgsConstructor@NoArgsConstructorpublic class Answer {    private String result;}
+package ru.arkasandr.carfinesearcher.model;import lombok.AllArgsConstructor;import lombok.Builder;import lombok.Data;import lombok.NoArgsConstructor;@Data@Builder@AllArgsConstructor@NoArgsConstructorpublic class Answer {    private String checkingInfo;    private String checkingDate;    private String checkingMessage;}

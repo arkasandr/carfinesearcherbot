@@ -31,3 +31,10 @@ spring:
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    rolling-file-name: ${LOG_NAME:LogXMLProcess}-%d{yyyy-MM-dd}.%i.log
+  file:
+    name: ${LOG_DIR:/var/log/xmlprocessforgaui}/${LOG_NAME:LogXMLProcess}.log

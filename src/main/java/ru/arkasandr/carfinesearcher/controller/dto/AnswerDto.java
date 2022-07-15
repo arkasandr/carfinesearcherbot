@@ -1,1 +1,1 @@
-package ru.arkasandr.carfinesearcher.controller.dto;import lombok.Data;@Datapublic class AnswerDto {    private String result;}
+package ru.arkasandr.carfinesearcher.controller.dto;import lombok.Data;@Datapublic class AnswerDto {    private String checkingInfo;    private String checkingDate;    private String checkingMessage;}
