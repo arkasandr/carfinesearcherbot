@@ -7,6 +7,9 @@ telegram:
   name: "CarFineSearcherBot"
   token: ${BOT_TOKEN:}
 
+gibdd:
+  fines:
+    url: https://xn--90adear.xn--p1ai/check/fines
 spring:
   jpa:
     generate-ddl: false
@@ -15,6 +18,7 @@ spring:
       ddl-auto: none
     properties:
       hibernate:
+        format_sql: true
         temp:
           use_jdbc_metadata_defaults: false
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
