@@ -24,6 +24,18 @@ public class Fine {
 
     private LocalDateTime receiptDate;
 
+    private String name;
+
+    private String violationDateAndTime;
+
+    private String koapPoint;
+
+    private String gibddDepartment;
+
+    private String gibddResolution;
+
+    private String requiredAmount;
+
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;

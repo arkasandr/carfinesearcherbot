@@ -10,6 +10,7 @@ telegram:
 gibdd:
   fines:
     url: https://xn--90adear.xn--p1ai/check/fines
+    screens: ${SCREENS:C:\\projects\\carfinesearcherbot\\screenshots\\error_}
 spring:
   jpa:
     generate-ddl: false
@@ -37,4 +38,4 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
     rolling-file-name: ${LOG_NAME:LogXMLProcess}-%d{yyyy-MM-dd}.%i.log
   file:
-    name: ${LOG_DIR:/var/log/xmlprocessforgaui}/${LOG_NAME:LogXMLProcess}.log
+    name: ${LOG_DIR:/logs}/${LOG_NAME:LogXMLProcess}.log
