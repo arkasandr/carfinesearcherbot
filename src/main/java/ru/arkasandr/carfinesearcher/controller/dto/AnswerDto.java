@@ -1,0 +1,1 @@
+package ru.arkasandr.carfinesearcher.controller.dto;import lombok.Data;import ru.arkasandr.carfinesearcher.model.Fine;import java.util.List;@Datapublic class AnswerDto {    private String checkingInfo;    private String checkingDate;    private String checkingMessage;    private List<Fine> fines;}
