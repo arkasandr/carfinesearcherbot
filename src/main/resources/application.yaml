@@ -32,6 +32,23 @@ spring:
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    password: fine
+    username: fine
+    exchange_client: test1
+    queue_client: ru.arkasandr.fine.client
+    routingkey_client: ru.arkasandr.fine.client.rk
+
+    exchange_server: test2
+    queue_server: ru.arkasandr.fine.server
+    routingkey_server: ru.arkasandr.fine.server.rk
+
+    exchange_status: test3
+    queue_status: ru.arkasandr.fine.captcha
+    routingkey_status: ru.arkasandr.fine.captcha.rk
+
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"

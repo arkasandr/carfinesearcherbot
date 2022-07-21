@@ -39,7 +39,7 @@ public class ChatService {
     @Transactional(readOnly = true)
     public Chat findChatByChatId(String chatId) {
         return chatRepository.findChatByChatId(Long.valueOf(chatId))
-                .orElseThrow(() -> new EntityNotFoundException("Запись о ТС с id = " + chatId + " отсутствует!"));
+                .orElse(Chat.builder().build());
     }
 
     @Transactional(rollbackFor = Exception.class)

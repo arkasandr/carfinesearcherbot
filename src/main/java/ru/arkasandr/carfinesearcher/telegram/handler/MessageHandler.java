@@ -37,7 +37,7 @@ public class MessageHandler {
         String chatId = message.getChatId().toString();
         log.info("ChatId is: {}", chatId);
         var chat = chatService.findChatByChatId(chatId);
-        if (isNull(chat)) {
+        if (isNull(chat.getId())) {
             chat = chatService.saveChatFromMessage(message);
         }
         String inputText = message.getText();
@@ -93,13 +93,14 @@ public class MessageHandler {
     }
 
     private SendMessage processRegistrationNumber(Chat chat, String chatId, String inputText) {
-        SendMessage result = new SendMessage();
+        SendMessage result;
         var existCarWithoutCertificateNumber = carService.findCarWithoutCertificateNumber();
         if (existCarWithoutCertificateNumber.isEmpty()) {
             var existCar = carService.findCarByRegistrationNumber(inputText);
             if (existCar.isEmpty()) {
                 chatService.saveRegistrationNumber(chat, inputText);
                 log.info("RegistrationNumber is: {}", inputText);
+                result = new SendMessage(chatId, REGISTRATION_NUMBER_MESSAGE.getMessage());
             } else {
                 result = new SendMessage(chatId, EXCEPTION_EXISTING_REGISTRATION_NUMBER.getMessage());
             }
@@ -110,7 +111,7 @@ public class MessageHandler {
     }
 
     private SendMessage processCertificateNumber(Chat chat, String chatId, String inputText) {
-        SendMessage result = new SendMessage();
+        SendMessage result;
         var existCar = carService.findCarByChatIdAndCertificateNumberIsNull(chat.getId());
         if (existCar.isPresent()) {
             existCar.ifPresent(car -> {
@@ -118,6 +119,7 @@ public class MessageHandler {
                         log.info("CertificateNumber is: {}", inputText);
                     }
             );
+            result = new SendMessage(chatId, CERTIFICATE_NUMBER_MESSAGE.getMessage());
         } else {
             result = isNull(carService.findCarIdWithFullDataAndNotInSendingStatus(chat.getId()))
                     ? new SendMessage(chatId, EXCEPTION_CERTIFICATE_BEFORE_REGISTRATION.getMessage())

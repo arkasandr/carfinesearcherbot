@@ -9,6 +9,7 @@ import ru.arkasandr.carfinesearcher.model.GibddRequest;
 import ru.arkasandr.carfinesearcher.model.enums.RequestStatus;
 import ru.arkasandr.carfinesearcher.repository.CarRepository;
 import ru.arkasandr.carfinesearcher.repository.GibddRequestRepository;
+import ru.arkasandr.carfinesearcher.service.message.MessageService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -25,6 +26,7 @@ public class RequestProcessService {
 
     private final CarRepository carRepository;
     private final GibddRequestRepository requestRepository;
+    private final MessageService messageService;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -36,7 +38,9 @@ public class RequestProcessService {
             var existRequest = existCar.getRequest();
             existRequest.setRequestDate(now());
             existRequest.setStatus(SENDING);
-            result =  requestRepository.save(existRequest);
+            result = requestRepository.save(existRequest);
+            messageService.sendMessageToQueue(result.getId());
+
         }
         return result;
     }
