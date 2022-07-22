@@ -31,4 +31,9 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Query(nativeQuery = true, value = " select * from car c "
             + " where c.certificate_number is null")
     Optional<Car> findCarWithoutCertificateNumber();
+
+    @Query(value = " select c from Car c "
+            + " left join fetch c.request "
+            + " where c.id = :id ")
+    Optional<Car> findCarWithRequestById(@Param("id") Long id);
 }

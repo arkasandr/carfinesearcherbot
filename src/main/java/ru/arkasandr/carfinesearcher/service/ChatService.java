@@ -12,8 +12,6 @@ import ru.arkasandr.carfinesearcher.model.enums.RequestStatus;
 import ru.arkasandr.carfinesearcher.repository.ChatRepository;
 import ru.arkasandr.carfinesearcher.repository.GibddRequestRepository;
 
-import javax.persistence.EntityNotFoundException;
-
 import static java.time.LocalDateTime.now;
 
 @Service

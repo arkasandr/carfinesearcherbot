@@ -6,17 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.arkasandr.carfinesearcher.model.Car;
 import ru.arkasandr.carfinesearcher.model.GibddRequest;
-import ru.arkasandr.carfinesearcher.model.enums.RequestStatus;
-import ru.arkasandr.carfinesearcher.repository.CarRepository;
 import ru.arkasandr.carfinesearcher.repository.GibddRequestRepository;
 import ru.arkasandr.carfinesearcher.service.message.MessageService;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Objects.isNull;
-import static java.util.Optional.ofNullable;
 import static ru.arkasandr.carfinesearcher.model.enums.RequestStatus.SENDING;
 
 @Service
@@ -24,23 +20,24 @@ import static ru.arkasandr.carfinesearcher.model.enums.RequestStatus.SENDING;
 @RequiredArgsConstructor
 public class RequestProcessService {
 
-    private final CarRepository carRepository;
+    private final CarService carService;
     private final GibddRequestRepository requestRepository;
     private final MessageService messageService;
 
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public GibddRequest sendRequest(Long id) {
         var result = new GibddRequest();
-        Car existCar = carRepository.findById(id)
+        Car existCar = carService.findCarWithRequestById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Запись о ТС с id = " + id + " отсутствует!"));
         if (!isNull(existCar.getRequest())) {
-            var existRequest = existCar.getRequest();
+            var existRequest = existCar.getRequest().stream()
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Запрос должен быть найден!"));
             existRequest.setRequestDate(now());
             existRequest.setStatus(SENDING);
             result = requestRepository.save(existRequest);
-            messageService.sendMessageToQueue(result.getId());
-
+            messageService.sendMessageToQueue(existCar);
         }
         return result;
     }

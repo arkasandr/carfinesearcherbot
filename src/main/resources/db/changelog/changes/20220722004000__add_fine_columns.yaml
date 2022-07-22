@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - preConditions:
+      - runningAs:
+          username: postgres
+
+  - changeSet:
+      id: 4
+      author: Arkasandr
+      changes:
+        - addColumn:
+            tableName: FINE
+            columns:
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: violation_date_and_time
+                  type: varchar(255)
+              - column:
+                  name: koap_point
+                  type: varchar(255)
+              - column:
+                  name: gibdd_department
+                  type: varchar(255)
+              - column:
+                  name: gibdd_resolution
+                  type: varchar(255)
+              - column:
+                  name: required_amount
+                  type: varchar(255)
+

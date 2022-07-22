@@ -40,4 +40,9 @@ public class CarService {
     public Optional<Car> findCarWithoutCertificateNumber() {
         return carRepository.findCarWithoutCertificateNumber();
     }
+
+    @Transactional(readOnly = true)
+    Optional<Car> findCarWithRequestById(Long id) {
+        return carRepository.findCarWithRequestById(id);
+    }
 }

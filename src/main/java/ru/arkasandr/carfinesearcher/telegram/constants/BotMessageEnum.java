@@ -12,7 +12,7 @@ public enum BotMessageEnum {
     WRONG_CERTIFICATE_NUMBER_MESSAGE("Неверный ввод! Необходимый формат: 99АА999999"),
     READY_DATA_MESSAGE("Все данные приняты. Для продолжения нажмите \"Отправить запрос\""),
 
-    EXCEPTION_ILLEGAL_MESSAGE("Умею читать только текст."),
+    EXCEPTION_ILLEGAL_MESSAGE("Internal Error"),
     EXCEPTION_WHAT_THE_FUCK("Что-то пошло не так. Обратитесь к разработчику."),
     EXCEPTION_EMPTY_MESSAGE("Вы отправили пустое сообщение!"),
     EXCEPTION_WRONG_MESSAGE("Вы отправили некорректные данные! Попробуйте еще раз!"),

@@ -1,15 +1,17 @@
 package ru.arkasandr.carfinesearcher.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import ru.arkasandr.carfinesearcher.model.enums.RequestStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-@Data
+@ToString(exclude = "car")
+@EqualsAndHashCode(exclude = "car")
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,7 +20,12 @@ import java.time.LocalDateTime;
 public class GibddRequest {
 
     @Id
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    private UUID id;
 
     private LocalDateTime requestDate;
 
@@ -26,23 +33,18 @@ public class GibddRequest {
 
     private LocalDateTime createDate;
 
+    @Lob
+    private byte[] captchaPic;
+
+    private Long captchaCode;
+
     @Basic
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private RequestStatus status;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_id")
     private Car car;
 
-    @Override
-    public String toString() {
-        return "GibddRequest{"
-                + "id=" + id
-                + ", requestDate=" + requestDate
-                + ", responseDate=" + responseDate
-                + ", createDate=" + createDate
-                + ", status=" + status
-                + '}';
-    }
 }
