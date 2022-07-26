@@ -26,7 +26,7 @@ public class RequestProcessService {
 
 
     @Transactional
-    public GibddRequest sendRequest(Long id) {
+    public GibddRequest sendRequestToGibddWithCarData(Long id) {
         var result = new GibddRequest();
         Car existCar = carService.findCarWithRequestById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Запись о ТС с id = " + id + " отсутствует!"));
@@ -37,7 +37,7 @@ public class RequestProcessService {
             existRequest.setRequestDate(now());
             existRequest.setStatus(SENDING);
             result = requestRepository.save(existRequest);
-            messageService.sendMessageToQueue(existCar);
+            messageService.sendMessageToQueueWithCarData(existCar);
         }
         return result;
     }

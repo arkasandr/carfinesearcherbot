@@ -88,7 +88,7 @@ public class MessageHandler {
     }
 
     private SendMessage sendRequestToPlatform(String chatId, Long id) {
-        requestProcessService.sendRequest(id);
+        requestProcessService.sendRequestToGibddWithCarData(id);
         return new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage());
     }
 
