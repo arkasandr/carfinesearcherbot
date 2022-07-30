@@ -25,7 +25,8 @@ public class ValidateDataService {
                     }
                     return new SendMessage(chatId, WRONG_REGISTRATION_NUMBER_MESSAGE.getMessage());
                 } else {
-                    if (data.toUpperCase().matches("^\\d{2}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{6}")) {
+                    if (data.toUpperCase().matches("^\\d{2}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{6}") ||
+                            data.toUpperCase().matches("^\\d{10}")) {
                         log.info("Certificate number is: {}", data.toUpperCase());
                         return new SendMessage(chatId, getCertificateNumberMessage(data.toUpperCase()));
                     }

@@ -1,1 +1,0 @@
-package ru.arkasandr.carfinesearcher.controller.dto;import lombok.Data;@Datapublic class UserDataDto {    private String regNumber;    private String certNumber;}
