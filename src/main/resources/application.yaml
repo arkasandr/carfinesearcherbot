@@ -45,9 +45,9 @@ spring:
     queue_server: ru.arkasandr.fine.server
     routingkey_server: ru.arkasandr.fine.server.rk
 
-    exchange_status: test3
-    queue_status: ru.arkasandr.fine.captcha
-    routingkey_status: ru.arkasandr.fine.captcha.rk
+    exchange_captcha: test3
+    queue_captcha: ru.arkasandr.fine.captcha
+    routingkey_captcha: ru.arkasandr.fine.captcha.rk
 
 logging:
   pattern:
