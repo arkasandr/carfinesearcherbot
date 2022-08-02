@@ -1,0 +1,1 @@
+package ru.arkasandr.carfinesearcher.exception;public class TelegramFileUploadException extends RuntimeException {}
