@@ -8,5 +8,6 @@ public enum RequestStatus {
     SENDING(),
     EXECUTED(),
     REJECTED(),
+    CAPTCHA_IS_WAITING(),
     DELETED();
 }

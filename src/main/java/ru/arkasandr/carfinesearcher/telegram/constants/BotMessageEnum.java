@@ -8,8 +8,10 @@ public enum BotMessageEnum {
     HELP_MESSAGE("Нужно придумать хэлп"),
     REGISTRATION_NUMBER_MESSAGE("Регистрационный знак принят. Введите и отправьте свидетельство о регистрации ТС в формате: 99АА999999"),
     CERTIFICATE_NUMBER_MESSAGE("Cвидетельство о регистрации принято. Для продолжения нажмите \"Отправить запрос\""),
+    CAPTCHA_VALUE_MESSAGE("Проверочный код принят"),
     WRONG_REGISTRATION_NUMBER_MESSAGE("Неверный ввод! Необходимый формат: А000АА777"),
     WRONG_CERTIFICATE_NUMBER_MESSAGE("Неверный ввод! Необходимый формат: 99АА999999"),
+    WRONG_CAPTCHA_VALUE_MESSAGE("Неверный ввод! Необходимый формат: 12345"),
     READY_DATA_MESSAGE("Все данные приняты. Для продолжения нажмите \"Отправить запрос\""),
 
     EXCEPTION_ILLEGAL_MESSAGE("Internal Error"),

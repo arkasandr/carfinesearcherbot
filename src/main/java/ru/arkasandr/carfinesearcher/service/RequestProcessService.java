@@ -41,4 +41,22 @@ public class RequestProcessService {
         }
         return result;
     }
+
+    @Transactional
+    public GibddRequest sendRequestToGibddWithCaptchaValue(Long id, String captcha) {
+        var result = new GibddRequest();
+        Car existCar = carService.findCarWithRequestById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Запись о ТС с id = " + id + " отсутствует!"));
+//        if (!isNull(existCar.getRequest())) {
+//            var existRequest = existCar.getRequest().stream()
+//                    .findFirst()
+//                    .orElseThrow(() -> new IllegalArgumentException("Запрос должен быть найден!"));
+//            existRequest.setRequestDate(now());
+//            existRequest.setStatus(SENDING);
+//            result = requestRepository.save(existRequest);
+//            messageService.sendMessageToQueueWithCarData(existCar);
+//        }
+        messageService.sendMessageToQueueWithCaptchaValue(existCar, captcha);
+        return result;
+    }
 }

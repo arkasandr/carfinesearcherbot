@@ -13,6 +13,7 @@ public class ValidateDataService {
 
     private static final Integer REG_NUMBER_POSITION = 21;
     private static final Integer CERT_NUMBER_POSITION = 29;
+    private static final Integer CAPTCHA_VALUE_POSITION = 16;
 
     public SendMessage validateUserData(String chatId, String data) {
         if (isNotBlank(data)) {
@@ -32,6 +33,12 @@ public class ValidateDataService {
                     }
                     return new SendMessage(chatId, WRONG_CERTIFICATE_NUMBER_MESSAGE.getMessage());
                 }
+            } else if(data.length() == 5) {
+                if (data.toUpperCase().matches("^\\d{5}")) {
+                    log.info("Captcha value is: {}", data.toUpperCase());
+                    return new SendMessage(chatId, getCaptchaValueMessage(data.toUpperCase()));
+                }
+                return new SendMessage(chatId, WRONG_CAPTCHA_VALUE_MESSAGE.getMessage());
             }
             return new SendMessage(chatId, EXCEPTION_WRONG_MESSAGE.getMessage());
         }
@@ -48,6 +55,12 @@ public class ValidateDataService {
         return CERTIFICATE_NUMBER_MESSAGE.getMessage().substring(0, CERT_NUMBER_POSITION)
                 + certNumber + " "
                 + CERTIFICATE_NUMBER_MESSAGE.getMessage().substring(CERT_NUMBER_POSITION);
+    }
+
+    private String getCaptchaValueMessage(String captcha) {
+        return CAPTCHA_VALUE_MESSAGE.getMessage().substring(0, CAPTCHA_VALUE_POSITION)
+                + captcha + " "
+                + CAPTCHA_VALUE_MESSAGE.getMessage().substring(CAPTCHA_VALUE_POSITION);
     }
 
 }

@@ -57,6 +57,9 @@ public class MessageHandler {
             } else if (validateMessage.getText().startsWith(CERTIFICATE_NUMBER_MESSAGE.getMessage().substring(0, 8))) {
                 validateMessage = processCertificateNumber(chat, chatId, inputText);
             }
+            else if (validateMessage.getText().startsWith(CAPTCHA_VALUE_MESSAGE.getMessage().substring(0, 8))) {
+                validateMessage = processCaptcha(chat, chatId, inputText);
+            }
             return isBlank(validateMessage.getText())
                     ? new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage())
                     : validateMessage;
@@ -126,5 +129,27 @@ public class MessageHandler {
                     : new SendMessage(chatId, READY_DATA_MESSAGE.getMessage());
         }
         return result;
+    }
+
+    private SendMessage processCaptcha(Chat chat, String chatId, String inputText) {
+//        SendMessage result;
+//        //TODO: обработать отправку caрtcha без привязки к запросу в статусе "Ожидает капчу" - если прилетит просто 5-значное число в отрыве от процесса
+//        var existCar = carService.findCarByChatIdAndCertificateNumberIsNull(chat.getId());
+//        if (existCar.isPresent()) {
+//            existCar.ifPresent(car -> {
+//                        chatService.saveCertificateNumber(chat, car, inputText);
+//                        log.info("CertificateNumber is: {}", inputText);
+//                    }
+//            );
+//            result = new SendMessage(chatId, CERTIFICATE_NUMBER_MESSAGE.getMessage());
+//        } else {
+//            result = isNull(carService.findCarIdWithFullDataAndNotInSendingStatus(chat.getId()))
+//                    ? new SendMessage(chatId, EXCEPTION_CERTIFICATE_BEFORE_REGISTRATION.getMessage())
+//                    : new SendMessage(chatId, READY_DATA_MESSAGE.getMessage());
+//        }
+//        return result;
+        var carId = carService.findCarIdWithFullDataAndCaptchaIsWaitingStatus(chat.getId());
+        requestProcessService.sendRequestToGibddWithCaptchaValue(carId, inputText);
+        return new SendMessage(chatId, CAPTCHA_VALUE_MESSAGE.getMessage());
     }
 }
