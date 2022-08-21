@@ -17,30 +17,33 @@ public class ValidateDataService {
 
     public SendMessage validateUserData(String chatId, String data) {
         if (isNotBlank(data)) {
-            if (data.length() == 8 || data.length() == 9 || data.length() == 10) {
-                if (data.length() == 8 || data.length() == 9) {
-                    if (data.toUpperCase().matches("^[ABCEHKMOPTYXАВЕКМНОРСТУХ]{1}\\d{3}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{2}")
-                            || data.toUpperCase().matches("^[ABCEHKMOPTYXАВЕКМНОРСТУХ]{1}\\d{3}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{3}")) {
-                        log.info("Registration number is: {}", data.toUpperCase());
-                        return new SendMessage(chatId, getRegistrationNumberMessage(data.toUpperCase()));
+            if (!data.matches(".*[а-яА-Я]+.*")) {
+                if (data.length() == 8 || data.length() == 9 || data.length() == 10) {
+                    if (data.length() == 8 || data.length() == 9) {
+                        if (data.toUpperCase().matches("^[ABCEHKMOPTYXАВЕКМНОРСТУХ]{1}\\d{3}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{2}")
+                                || data.toUpperCase().matches("^[ABCEHKMOPTYXАВЕКМНОРСТУХ]{1}\\d{3}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{3}")) {
+                            log.info("Registration number is: {}", data.toUpperCase());
+                            return new SendMessage(chatId, getRegistrationNumberMessage(data.toUpperCase()));
+                        }
+                        return new SendMessage(chatId, WRONG_REGISTRATION_NUMBER_MESSAGE.getMessage());
+                    } else {
+                        if (data.toUpperCase().matches("^\\d{2}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{6}") ||
+                                data.toUpperCase().matches("^\\d{10}")) {
+                            log.info("Certificate number is: {}", data.toUpperCase());
+                            return new SendMessage(chatId, getCertificateNumberMessage(data.toUpperCase()));
+                        }
+                        return new SendMessage(chatId, WRONG_CERTIFICATE_NUMBER_MESSAGE.getMessage());
                     }
-                    return new SendMessage(chatId, WRONG_REGISTRATION_NUMBER_MESSAGE.getMessage());
-                } else {
-                    if (data.toUpperCase().matches("^\\d{2}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{6}") ||
-                            data.toUpperCase().matches("^\\d{10}")) {
-                        log.info("Certificate number is: {}", data.toUpperCase());
-                        return new SendMessage(chatId, getCertificateNumberMessage(data.toUpperCase()));
+                } else if (data.length() == 5) {
+                    if (data.toUpperCase().matches("^\\d{5}")) {
+                        log.info("Captcha value is: {}", data.toUpperCase());
+                        return new SendMessage(chatId, getCaptchaValueMessage(data.toUpperCase()));
                     }
-                    return new SendMessage(chatId, WRONG_CERTIFICATE_NUMBER_MESSAGE.getMessage());
+                    return new SendMessage(chatId, WRONG_CAPTCHA_VALUE_MESSAGE.getMessage());
                 }
-            } else if(data.length() == 5) {
-                if (data.toUpperCase().matches("^\\d{5}")) {
-                    log.info("Captcha value is: {}", data.toUpperCase());
-                    return new SendMessage(chatId, getCaptchaValueMessage(data.toUpperCase()));
-                }
-                return new SendMessage(chatId, WRONG_CAPTCHA_VALUE_MESSAGE.getMessage());
-            }
             return new SendMessage(chatId, EXCEPTION_WRONG_MESSAGE.getMessage());
+        }
+            return new SendMessage(chatId, EXCEPTION_WRONG_LANGUAGE_MESSAGE.getMessage());
         }
         return new SendMessage(chatId, EXCEPTION_EMPTY_MESSAGE.getMessage());
     }

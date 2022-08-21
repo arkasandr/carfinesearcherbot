@@ -18,6 +18,7 @@ public enum BotMessageEnum {
     EXCEPTION_WHAT_THE_FUCK("Что-то пошло не так. Обратитесь к разработчику."),
     EXCEPTION_EMPTY_MESSAGE("Вы отправили пустое сообщение!"),
     EXCEPTION_WRONG_MESSAGE("Вы отправили некорректные данные! Попробуйте еще раз!"),
+    EXCEPTION_WRONG_LANGUAGE_MESSAGE("Сообщение должно содержать только буквы латинского алфавита! Попробуйте еще раз!"),
     EXCEPTION_CERTIFICATE_BEFORE_REGISTRATION("Сначала введите регистрационный знак ТС!"),
     EXCEPTION_EXISTING_REGISTRATION_NUMBER("Регистрационный знак уже сохранен. Теперь введите свидетельство о регистрации"),
     EXCEPTION_CAPTCHA_WAITING_REQUEST("Неверный ввод! Возможно, Вы хотели ввести проверочный код, но у Вас нет незаконченных запросов"),
