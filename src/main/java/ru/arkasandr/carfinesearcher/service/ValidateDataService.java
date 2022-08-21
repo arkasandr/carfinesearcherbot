@@ -41,8 +41,8 @@ public class ValidateDataService {
                     }
                     return new SendMessage(chatId, WRONG_CAPTCHA_VALUE_MESSAGE.getMessage());
                 }
-            return new SendMessage(chatId, EXCEPTION_WRONG_MESSAGE.getMessage());
-        }
+                return new SendMessage(chatId, EXCEPTION_WRONG_MESSAGE.getMessage());
+            }
             return new SendMessage(chatId, EXCEPTION_WRONG_LANGUAGE_MESSAGE.getMessage());
         }
         return new SendMessage(chatId, EXCEPTION_EMPTY_MESSAGE.getMessage());
