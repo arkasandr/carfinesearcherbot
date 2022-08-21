@@ -9,5 +9,6 @@ public enum RequestStatus {
     EXECUTED(),
     REJECTED(),
     CAPTCHA_IS_WAITING(),
+    CAPTCHA_SEND(),
     DELETED();
 }

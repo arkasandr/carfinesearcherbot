@@ -20,6 +20,7 @@ public enum BotMessageEnum {
     EXCEPTION_WRONG_MESSAGE("Вы отправили некорректные данные! Попробуйте еще раз!"),
     EXCEPTION_CERTIFICATE_BEFORE_REGISTRATION("Сначала введите регистрационный знак ТС!"),
     EXCEPTION_EXISTING_REGISTRATION_NUMBER("Регистрационный знак уже сохранен. Теперь введите свидетельство о регистрации"),
+    EXCEPTION_CAPTCHA_WAITING_REQUEST("Неверный ввод! Возможно, Вы хотели ввести проверочный код, но у Вас нет незаконченных запросов"),
     EXCEPTION_EXISTING_REQUEST("Имеется незаконченный запрос! Введите свидетельство о регистрации");
 
     private final String message;

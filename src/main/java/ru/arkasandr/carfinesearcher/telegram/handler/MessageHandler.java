@@ -132,24 +132,14 @@ public class MessageHandler {
     }
 
     private SendMessage processCaptcha(Chat chat, String chatId, String inputText) {
-//        SendMessage result;
-//        //TODO: обработать отправку caрtcha без привязки к запросу в статусе "Ожидает капчу" - если прилетит просто 5-значное число в отрыве от процесса
-//        var existCar = carService.findCarByChatIdAndCertificateNumberIsNull(chat.getId());
-//        if (existCar.isPresent()) {
-//            existCar.ifPresent(car -> {
-//                        chatService.saveCertificateNumber(chat, car, inputText);
-//                        log.info("CertificateNumber is: {}", inputText);
-//                    }
-//            );
-//            result = new SendMessage(chatId, CERTIFICATE_NUMBER_MESSAGE.getMessage());
-//        } else {
-//            result = isNull(carService.findCarIdWithFullDataAndNotInSendingStatus(chat.getId()))
-//                    ? new SendMessage(chatId, EXCEPTION_CERTIFICATE_BEFORE_REGISTRATION.getMessage())
-//                    : new SendMessage(chatId, READY_DATA_MESSAGE.getMessage());
-//        }
-//        return result;
+        SendMessage result;
         var carId = carService.findCarIdWithFullDataAndCaptchaIsWaitingStatus(chat.getId());
-        requestProcessService.sendRequestToGibddWithCaptchaValue(carId, inputText);
-        return new SendMessage(chatId, CAPTCHA_VALUE_MESSAGE.getMessage());
+        if (!isNull(carId)) {
+            requestProcessService.sendRequestToGibddWithCaptchaValue(carId, inputText);
+            result = new SendMessage(chatId, CAPTCHA_VALUE_MESSAGE.getMessage());
+        } else {
+            result = new SendMessage(chatId, EXCEPTION_CAPTCHA_WAITING_REQUEST.getMessage());
+        }
+        return result;
     }
 }
