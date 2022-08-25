@@ -8,11 +8,11 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.arkasandr.carfinesearcher.model.Car;
 import ru.arkasandr.carfinesearcher.model.Chat;
 import ru.arkasandr.carfinesearcher.model.GibddRequest;
-import ru.arkasandr.carfinesearcher.model.enums.RequestStatus;
 import ru.arkasandr.carfinesearcher.repository.ChatRepository;
 import ru.arkasandr.carfinesearcher.repository.GibddRequestRepository;
 
 import static java.time.LocalDateTime.now;
+import static ru.arkasandr.carfinesearcher.model.enums.RequestStatus.READY_FOR_SEND;
 
 @Service
 @Slf4j
@@ -56,7 +56,7 @@ public class ChatService {
         carService.save(car);
         var newRequest = GibddRequest.builder()
                 .createDate(now())
-                .status(RequestStatus.READY_FOR_SEND)
+                .status(READY_FOR_SEND)
                 .car(car)
                 .build();
         gibddRequestRepository.save(newRequest);

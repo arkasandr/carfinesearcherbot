@@ -13,7 +13,7 @@ import javax.persistence.EntityNotFoundException;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Objects.isNull;
-import static ru.arkasandr.carfinesearcher.model.enums.RequestStatus.SENDING;
+import static ru.arkasandr.carfinesearcher.model.enums.RequestStatus.*;
 
 @Service
 @Slf4j
@@ -37,8 +37,8 @@ public class RequestProcessService {
             existRequest.setRequestDate(now());
             existRequest.setStatus(SENDING);
             result = requestRepository.save(existRequest);
-            messageService.sendMessageToQueueWithCarData(existCar);
         }
+        messageService.sendMessageToQueueWithCarData(existCar);
         return result;
     }
 
