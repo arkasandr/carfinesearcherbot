@@ -56,8 +56,7 @@ public class MessageHandler {
                 validateMessage = processRegistrationNumber(chat, chatId, inputText);
             } else if (validateMessage.getText().startsWith(CERTIFICATE_NUMBER_MESSAGE.getMessage().substring(0, 8))) {
                 validateMessage = processCertificateNumber(chat, chatId, inputText);
-            }
-            else if (validateMessage.getText().startsWith(CAPTCHA_VALUE_MESSAGE.getMessage().substring(0, 8))) {
+            } else if (validateMessage.getText().startsWith(CAPTCHA_VALUE_MESSAGE.getMessage().substring(0, 8))) {
                 validateMessage = processCaptcha(chat, chatId, inputText);
             }
             return isBlank(validateMessage.getText())

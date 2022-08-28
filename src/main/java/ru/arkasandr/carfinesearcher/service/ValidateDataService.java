@@ -31,8 +31,8 @@ public class ValidateDataService {
                     if (data.matches(".*[а-яА-Я]+.*")) {
                         return new SendMessage(chatId, EXCEPTION_WRONG_ENGLISH_LANGUAGE_MESSAGE.getMessage());
                     }
-                    if (data.toUpperCase().matches("^\\d{2}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{6}") ||
-                            data.toUpperCase().matches("^\\d{10}")) {
+                    if (data.toUpperCase().matches("^\\d{2}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{6}")
+                            || data.toUpperCase().matches("^\\d{10}")) {
                         log.info("Certificate number is: {}", data.toUpperCase());
                         return new SendMessage(chatId, getCertificateNumberMessage(data.toUpperCase()));
                     }
