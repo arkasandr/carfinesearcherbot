@@ -1,43 +1,40 @@
 package ru.arkasandr.carfinesearcher.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "CHAT")
 public class Chat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ToString.Include
+    @EqualsAndHashCode.Include
     private Long id;
 
+    @ToString.Include
     private Long chatId;
 
+    @ToString.Include
     private String firstName;
 
+    @ToString.Include
     private String lastName;
 
+    @ToString.Include
     private String userName;
 
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
-    Set<Car> chatCars;
+    private Set<Car> chatCars;
 
-    @Override
-    public String toString() {
-        return "Chat{"
-                + "id=" + id
-                + ", chatId=" + chatId
-                + ", firstName='" + firstName + '\''
-                + ", lastName='" + lastName + '\''
-                + ", userName='" + userName + '\''
-                + '}';
-    }
 }

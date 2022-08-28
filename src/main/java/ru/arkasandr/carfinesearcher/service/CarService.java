@@ -37,7 +37,22 @@ public class CarService {
     }
 
     @Transactional(readOnly = true)
+    public Long findCarIdWithFullDataAndReadyForSend(Long id) {
+        return carRepository.findCarIdWithFullDataAndReadyForSend(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Long findCarIdWithFullDataAndCaptchaIsWaitingStatus(Long id) {
+        return carRepository.findCarIdWithFullDataAndCaptchaIsWaitingStatus(id);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<Car> findCarWithoutCertificateNumber() {
         return carRepository.findCarWithoutCertificateNumber();
+    }
+
+    @Transactional(readOnly = true)
+    Optional<Car> findCarWithRequestById(Long id) {
+        return carRepository.findCarWithRequestById(id);
     }
 }

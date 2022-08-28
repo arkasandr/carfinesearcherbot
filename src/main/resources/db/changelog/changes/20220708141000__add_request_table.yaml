@@ -11,6 +11,11 @@ databaseChangeLog:
             tableName: GIBDD_REQUEST
             columns:
               - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
                   name: create_date
                   type: datetime
                   remarks: дата создания запроса

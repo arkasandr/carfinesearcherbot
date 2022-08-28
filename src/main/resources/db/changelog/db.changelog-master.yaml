@@ -3,3 +3,9 @@ databaseChangeLog:
       file: db/changelog/changes/20220704124800__add_chat_car_fine_request_tables.yaml
   - include:
       file: db/changelog/changes/20220708141000__add_request_table.yaml
+  - include:
+      file: db/changelog/changes/20220721224800__add_request_uuid_column.yaml
+  - include:
+      file: db/changelog/changes/20220722004000__add_fine_columns.yaml
+
+

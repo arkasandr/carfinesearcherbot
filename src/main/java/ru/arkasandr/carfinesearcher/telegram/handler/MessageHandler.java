@@ -26,6 +26,8 @@ import static ru.arkasandr.carfinesearcher.telegram.constants.ButtonNameEnum.SEN
 public class MessageHandler {
 
     private static final String USER_START = "/start";
+    private static final Integer START_MESSAGE_SYMBOL = 0;
+    private static final Integer END_MESSAGE_SYMBOL = 8;
 
     private final ReplyKeyboardMaker keyboardMaker;
     private final ValidateDataService validateDataService;
@@ -37,7 +39,7 @@ public class MessageHandler {
         String chatId = message.getChatId().toString();
         log.info("ChatId is: {}", chatId);
         var chat = chatService.findChatByChatId(chatId);
-        if (isNull(chat)) {
+        if (isNull(chat.getId())) {
             chat = chatService.saveChatFromMessage(message);
         }
         String inputText = message.getText();
@@ -52,10 +54,15 @@ public class MessageHandler {
             return getHelpMessage(chatId);
         } else {
             SendMessage validateMessage = validateDataService.validateUserData(chatId, inputText);
-            if (validateMessage.getText().startsWith(REGISTRATION_NUMBER_MESSAGE.getMessage().substring(0, 8))) {
+            if (validateMessage.getText().startsWith(REGISTRATION_NUMBER_MESSAGE.getMessage()
+                    .substring(START_MESSAGE_SYMBOL, END_MESSAGE_SYMBOL))) {
                 validateMessage = processRegistrationNumber(chat, chatId, inputText);
-            } else if (validateMessage.getText().startsWith(CERTIFICATE_NUMBER_MESSAGE.getMessage().substring(0, 8))) {
+            } else if (validateMessage.getText().startsWith(CERTIFICATE_NUMBER_MESSAGE.getMessage()
+                    .substring(START_MESSAGE_SYMBOL, END_MESSAGE_SYMBOL))) {
                 validateMessage = processCertificateNumber(chat, chatId, inputText);
+            } else if (validateMessage.getText().startsWith(CAPTCHA_VALUE_MESSAGE.getMessage()
+                    .substring(START_MESSAGE_SYMBOL, END_MESSAGE_SYMBOL))) {
+                validateMessage = processCaptcha(chat, chatId, inputText);
             }
             return isBlank(validateMessage.getText())
                     ? new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage())
@@ -71,7 +78,7 @@ public class MessageHandler {
     }
 
     private SendMessage getDataMessage(Chat chat, String chatId) {
-        var carId = carService.findCarIdWithFullDataAndNotInSendingStatus(chat.getId());
+        var carId = carService.findCarIdWithFullDataAndReadyForSend(chat.getId());
         var sendMessage = isNull(carId)
                 ? new SendMessage(chatId, START_MESSAGE.getMessage())
                 : sendRequestToPlatform(chatId, carId);
@@ -88,18 +95,19 @@ public class MessageHandler {
     }
 
     private SendMessage sendRequestToPlatform(String chatId, Long id) {
-        requestProcessService.sendRequest(id);
+        requestProcessService.sendRequestToGibddWithCarData(id);
         return new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage());
     }
 
     private SendMessage processRegistrationNumber(Chat chat, String chatId, String inputText) {
-        SendMessage result = new SendMessage();
+        SendMessage result;
         var existCarWithoutCertificateNumber = carService.findCarWithoutCertificateNumber();
         if (existCarWithoutCertificateNumber.isEmpty()) {
             var existCar = carService.findCarByRegistrationNumber(inputText);
             if (existCar.isEmpty()) {
                 chatService.saveRegistrationNumber(chat, inputText);
                 log.info("RegistrationNumber is: {}", inputText);
+                result = new SendMessage(chatId, REGISTRATION_NUMBER_MESSAGE.getMessage());
             } else {
                 result = new SendMessage(chatId, EXCEPTION_EXISTING_REGISTRATION_NUMBER.getMessage());
             }
@@ -110,7 +118,7 @@ public class MessageHandler {
     }
 
     private SendMessage processCertificateNumber(Chat chat, String chatId, String inputText) {
-        SendMessage result = new SendMessage();
+        SendMessage result;
         var existCar = carService.findCarByChatIdAndCertificateNumberIsNull(chat.getId());
         if (existCar.isPresent()) {
             existCar.ifPresent(car -> {
@@ -118,10 +126,23 @@ public class MessageHandler {
                         log.info("CertificateNumber is: {}", inputText);
                     }
             );
+            result = new SendMessage(chatId, CERTIFICATE_NUMBER_MESSAGE.getMessage());
         } else {
-            result = isNull(carService.findCarIdWithFullDataAndNotInSendingStatus(chat.getId()))
+            result = isNull(carService.findCarIdWithFullDataAndReadyForSend(chat.getId()))
                     ? new SendMessage(chatId, EXCEPTION_CERTIFICATE_BEFORE_REGISTRATION.getMessage())
                     : new SendMessage(chatId, READY_DATA_MESSAGE.getMessage());
+        }
+        return result;
+    }
+
+    private SendMessage processCaptcha(Chat chat, String chatId, String inputText) {
+        SendMessage result;
+        var carId = carService.findCarIdWithFullDataAndCaptchaIsWaitingStatus(chat.getId());
+        if (!isNull(carId)) {
+            requestProcessService.sendRequestToGibddWithCaptchaValue(carId, inputText);
+            result = new SendMessage(chatId, CAPTCHA_VALUE_MESSAGE.getMessage());
+        } else {
+            result = new SendMessage(chatId, EXCEPTION_CAPTCHA_WAITING_REQUEST.getMessage());
         }
         return result;
     }

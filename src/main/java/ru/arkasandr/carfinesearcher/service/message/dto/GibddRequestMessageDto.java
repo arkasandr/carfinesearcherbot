@@ -1,0 +1,1 @@
+package ru.arkasandr.carfinesearcher.service.message.dto;import lombok.*;import java.io.Serializable;import java.util.UUID;@Data@Builder@AllArgsConstructor@NoArgsConstructorpublic class GibddRequestMessageDto implements Serializable {    private String registrationNumber;    private String certificateNumber;    private UUID uuid;}

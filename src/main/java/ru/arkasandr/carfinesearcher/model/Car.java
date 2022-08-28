@@ -5,21 +5,27 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = "request")
 @Entity
 @Table(name = "CAR")
 public class Car {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Long id;
 
+    @ToString.Include
     private String registrationNumber;
 
+    @ToString.Include
     private String certificateNumber;
 
     @ManyToOne
@@ -27,18 +33,8 @@ public class Car {
     private Chat chat;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
-    Set<Fine> carFines;
+    private Set<Fine> carFines;
 
-    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    private GibddRequest request;
-
-    @Override
-    public String toString() {
-        return "Car{"
-                + "id=" + id
-                + ", registrationNumber='" + registrationNumber + '\''
-                + ", certificateNumber='" + certificateNumber + '\''
-                + '}';
-    }
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    private Set<GibddRequest> request;
 }
