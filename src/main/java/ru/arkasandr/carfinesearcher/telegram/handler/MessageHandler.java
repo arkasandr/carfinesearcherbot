@@ -26,6 +26,8 @@ import static ru.arkasandr.carfinesearcher.telegram.constants.ButtonNameEnum.SEN
 public class MessageHandler {
 
     private static final String USER_START = "/start";
+    private static final Integer START_MESSAGE_SYMBOL = 0;
+    private static final Integer END_MESSAGE_SYMBOL = 8;
 
     private final ReplyKeyboardMaker keyboardMaker;
     private final ValidateDataService validateDataService;
@@ -52,11 +54,14 @@ public class MessageHandler {
             return getHelpMessage(chatId);
         } else {
             SendMessage validateMessage = validateDataService.validateUserData(chatId, inputText);
-            if (validateMessage.getText().startsWith(REGISTRATION_NUMBER_MESSAGE.getMessage().substring(0, 8))) {
+            if (validateMessage.getText().startsWith(REGISTRATION_NUMBER_MESSAGE.getMessage()
+                    .substring(START_MESSAGE_SYMBOL, END_MESSAGE_SYMBOL))) {
                 validateMessage = processRegistrationNumber(chat, chatId, inputText);
-            } else if (validateMessage.getText().startsWith(CERTIFICATE_NUMBER_MESSAGE.getMessage().substring(0, 8))) {
+            } else if (validateMessage.getText().startsWith(CERTIFICATE_NUMBER_MESSAGE.getMessage()
+                    .substring(START_MESSAGE_SYMBOL, END_MESSAGE_SYMBOL))) {
                 validateMessage = processCertificateNumber(chat, chatId, inputText);
-            } else if (validateMessage.getText().startsWith(CAPTCHA_VALUE_MESSAGE.getMessage().substring(0, 8))) {
+            } else if (validateMessage.getText().startsWith(CAPTCHA_VALUE_MESSAGE.getMessage()
+                    .substring(START_MESSAGE_SYMBOL, END_MESSAGE_SYMBOL))) {
                 validateMessage = processCaptcha(chat, chatId, inputText);
             }
             return isBlank(validateMessage.getText())
@@ -73,7 +78,6 @@ public class MessageHandler {
     }
 
     private SendMessage getDataMessage(Chat chat, String chatId) {
-       //var carId = carService.findCarIdWithFullDataAndNotInSendingStatus(chat.getId());
         var carId = carService.findCarIdWithFullDataAndReadyForSend(chat.getId());
         var sendMessage = isNull(carId)
                 ? new SendMessage(chatId, START_MESSAGE.getMessage())
@@ -124,7 +128,6 @@ public class MessageHandler {
             );
             result = new SendMessage(chatId, CERTIFICATE_NUMBER_MESSAGE.getMessage());
         } else {
-            //result = isNull(carService.findCarIdWithFullDataAndNotInSendingStatus(chat.getId()))
             result = isNull(carService.findCarIdWithFullDataAndReadyForSend(chat.getId()))
                     ? new SendMessage(chatId, EXCEPTION_CERTIFICATE_BEFORE_REGISTRATION.getMessage())
                     : new SendMessage(chatId, READY_DATA_MESSAGE.getMessage());
