@@ -37,17 +37,27 @@ spring:
     port: 5672
     password: fine
     username: fine
-    exchange_client: test1
+    exchange_client: clientRequestFinesExchange
     queue_client: ru.arkasandr.fine.client
     routingkey_client: ru.arkasandr.fine.client.rk
 
-    exchange_server: test2
+    exchange_server: serverResponseFinesExchange
     queue_server: ru.arkasandr.fine.server
     routingkey_server: ru.arkasandr.fine.server.rk
 
-    exchange_captcha: test3
+    exchange_captcha: captchaRequestFinesExchange
     queue_captcha: ru.arkasandr.fine.captcha
     routingkey_captcha: ru.arkasandr.fine.captcha.rk
+
+    exchange_captcha_value: captchaValueResponseFinesExchange
+    queue_captcha_value: ru.arkasandr.fine.captcha.value
+    routingkey_captcha_value: ru.arkasandr.fine.captcha.value.rk
+
+    exchange_answer: answerFinesExchange
+    queue_answer: ru.arkasandr.fine.answer
+    routingkey_answer: ru.arkasandr.fine.answer.rk
+
+
 
 logging:
   pattern:
