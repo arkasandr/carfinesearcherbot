@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - preConditions:
+      - runningAs:
+          username: postgres
+
+  - changeSet:
+      id: 5
+      author: Arkasandr
+      changes:
+        - addColumn:
+            tableName: GIBDD_REQUEST
+            columns:
+              - column:
+                  name: captcha_attempt
+                  type: int
+
