@@ -11,6 +11,8 @@ gibdd:
   fines:
     url: https://xn--90adear.xn--p1ai/check/fines
     screens: ${SCREENS:C:\\projects\\carfinesearcherbot\\screenshots\\error_}
+  maxCaptchaAttempt: 3
+
 spring:
   jpa:
     generate-ddl: false

@@ -38,6 +38,8 @@ public class GibddRequest {
 
     private Long captchaCode;
 
+    private Integer captchaAttempt;
+
     @Basic
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

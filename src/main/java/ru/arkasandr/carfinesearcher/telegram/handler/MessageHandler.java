@@ -139,6 +139,7 @@ public class MessageHandler {
         SendMessage result;
         var carId = carService.findCarIdWithFullDataAndCaptchaIsWaitingStatus(chat.getId());
         if (!isNull(carId)) {
+            requestProcessService.increaseCaptchaAttempt(carId);
             requestProcessService.sendRequestToGibddWithCaptchaValue(carId, inputText);
             result = new SendMessage(chatId, CAPTCHA_VALUE_MESSAGE.getMessage());
         } else {

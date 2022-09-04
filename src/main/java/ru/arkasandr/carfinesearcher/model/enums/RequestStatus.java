@@ -10,5 +10,6 @@ public enum RequestStatus {
     REJECTED(),  //ОТКЛОНЕН
     CAPTCHA_IS_WAITING(), //ОЖИДАЕТСЯ CAPTCHA
     CAPTCHA_SENT(),  //CAPTCHA ОТПРАВЛЕНА
+    CAPTCHA_ERROR(),  //НЕВЕРНАЯ CAPTCHA
     DELETED();   //УДАЛЕН
 }
