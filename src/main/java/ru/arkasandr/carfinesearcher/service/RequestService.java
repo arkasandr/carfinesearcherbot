@@ -43,6 +43,7 @@ public class RequestService {
                 .status(READY_FOR_SEND)
                 .car(existCar)
                 .build();
+        requestRepository.save(request);
         var carRequests = existCar.getRequest();
         carRequests.add(request);
         existCar.setRequest(carRequests);

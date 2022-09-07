@@ -28,7 +28,7 @@ public class ValidateDataService {
                     }
                     return new SendMessage(chatId, WRONG_REGISTRATION_NUMBER_MESSAGE.getMessage());
                 } else {
-                    if (data.matches(".*[а-яА-Я]+.*")) {
+                    if (data.matches(".*[а-яА-Я]+.*") && data.toUpperCase().matches("^\\d{2}[а-яА-Я]{2}\\d{6}")) {
                         return new SendMessage(chatId, EXCEPTION_WRONG_ENGLISH_LANGUAGE_MESSAGE.getMessage());
                     }
                     if (data.toUpperCase().matches("^\\d{2}[ABCEHKMOPTYXАВЕКМНОРСТУХ]{2}\\d{6}")
