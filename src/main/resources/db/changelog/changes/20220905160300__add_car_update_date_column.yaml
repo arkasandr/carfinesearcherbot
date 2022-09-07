@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - preConditions:
+      - runningAs:
+          username: postgres
+
+  - changeSet:
+      id: 6
+      author: Arkasandr
+      changes:
+        - addColumn:
+            tableName: CAR
+            columns:
+              - column:
+                  name: update_date
+                  type: datetime
+

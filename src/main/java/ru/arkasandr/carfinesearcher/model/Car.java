@@ -3,6 +3,7 @@ package ru.arkasandr.carfinesearcher.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -27,6 +28,9 @@ public class Car {
 
     @ToString.Include
     private String certificateNumber;
+
+    @ToString.Include
+    private LocalDateTime updateDate;
 
     @ManyToOne
     @JoinColumn(name = "chat_id")
