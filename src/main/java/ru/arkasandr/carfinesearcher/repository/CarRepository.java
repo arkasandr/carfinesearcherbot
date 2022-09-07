@@ -73,4 +73,11 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             + " and c.certificateNumber is not null "
             + " and c.updateDate = (SELECT MAX(c.updateDate) from c) ")
     Long findCarIdWithFullDataAndLastUpdateDate(@Param("id") Long id);
+
+    @Query(value = " select c from Car c "
+            + " left join c.chat ch "
+            + " where ch.id = :id "
+            + " and c.registrationNumber is not null "
+            + " and c.updateDate = (SELECT MAX(c.updateDate) from c) ")
+    Optional<Car> findCarWithRegistrationNumberAndLastUpdateDate(@Param("id") Long id);
 }

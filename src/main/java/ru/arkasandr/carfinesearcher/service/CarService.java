@@ -65,4 +65,9 @@ public class CarService {
     public Long findCarIdWithFullDataAndLastUpdateDate(Long id) {
         return carRepository.findCarIdWithFullDataAndLastUpdateDate(id);
     }
+
+    @Transactional(readOnly = true)
+    public Optional<Car> findCarWithRegistrationNumberAndLastUpdateDate(Long id) {
+        return carRepository.findCarWithRegistrationNumberAndLastUpdateDate(id);
+    }
 }

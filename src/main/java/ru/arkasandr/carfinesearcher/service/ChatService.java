@@ -43,6 +43,7 @@ public class ChatService {
     public void saveRegistrationNumber(Chat chat, String registrationNumber) {
         var car = Car.builder()
                 .registrationNumber(registrationNumber)
+                .updateDate(now())
                 .chat(chat)
                 .build();
         carService.save(car);
