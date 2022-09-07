@@ -38,7 +38,7 @@ public class CarService {
 
     @Transactional(readOnly = true)
     public Long findCarIdWithFullDataAndReadyForSend(Long id) {
-        return carRepository.findCarIdWithFullDataAndReadyForSend(id);
+        return carRepository.findCarIdByFullDataAndReadyForSend(id);
     }
 
     @Transactional(readOnly = true)
@@ -52,7 +52,17 @@ public class CarService {
     }
 
     @Transactional(readOnly = true)
-    Optional<Car> findCarWithRequestById(Long id) {
+    public Optional<Car> findCarWithRequestById(Long id) {
         return carRepository.findCarWithRequestById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Long findCarIdByCertificateNumberAndLastUpdateDate(Long id, String certificateNumber) {
+        return carRepository.findCarIdByCertificateNumberAndLastUpdateDate(id, certificateNumber);
+    }
+
+    @Transactional(readOnly = true)
+    public Long findCarIdWithFullDataAndLastUpdateDate(Long id) {
+        return carRepository.findCarIdWithFullDataAndLastUpdateDate(id);
     }
 }

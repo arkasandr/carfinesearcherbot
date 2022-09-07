@@ -7,14 +7,12 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.arkasandr.carfinesearcher.model.Chat;
-import ru.arkasandr.carfinesearcher.service.CarService;
-import ru.arkasandr.carfinesearcher.service.ChatService;
-import ru.arkasandr.carfinesearcher.service.RequestProcessService;
-import ru.arkasandr.carfinesearcher.service.ValidateDataService;
+import ru.arkasandr.carfinesearcher.service.*;
 import ru.arkasandr.carfinesearcher.telegram.keyboards.ReplyKeyboardMaker;
 
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static ru.arkasandr.carfinesearcher.service.util.GenerateSendMessageUtil.generateSendMessageWithKeyboard;
 import static ru.arkasandr.carfinesearcher.telegram.constants.BotMessageEnum.*;
 import static ru.arkasandr.carfinesearcher.telegram.constants.ButtonNameEnum.HELP_BUTTON;
 import static ru.arkasandr.carfinesearcher.telegram.constants.ButtonNameEnum.SENT_BUTTON;
@@ -29,11 +27,15 @@ public class MessageHandler {
     private static final Integer START_MESSAGE_SYMBOL = 0;
     private static final Integer END_MESSAGE_SYMBOL = 8;
 
+
     private final ReplyKeyboardMaker keyboardMaker;
     private final ValidateDataService validateDataService;
     private final ChatService chatService;
     private final CarService carService;
-    private final RequestProcessService requestProcessService;
+    private final RequestService requestService;
+    private final ProcessDataService processDataService;
+
+
 
     public BotApiMethod<?> answerMessage(Message message) {
         String chatId = message.getChatId().toString();
@@ -43,26 +45,28 @@ public class MessageHandler {
             chat = chatService.saveChatFromMessage(message);
         }
         String inputText = message.getText();
-        log.info("Message text is: {}", inputText);
+        log.debug("Message text is: {}", inputText);
         if (inputText == null) {
             throw new IllegalArgumentException();
         } else if (inputText.equals(USER_START)) {
-            return getStartMessage(chatId);
+            return generateSendMessageWithKeyboard(chatId, START_MESSAGE.getMessage(),
+                    keyboardMaker.getHelpMenuKeyboard());
         } else if (inputText.equals(SENT_BUTTON.getButtonName())) {
-            return getDataMessage(chat, chatId);
+            return getSendRequestMessage(chat, chatId);
         } else if (inputText.equals(HELP_BUTTON.getButtonName())) {
-            return getHelpMessage(chatId);
+            return generateSendMessageWithKeyboard(chatId, HELP_MESSAGE.getMessage(),
+                    keyboardMaker.getHelpMenuKeyboard());
         } else {
             SendMessage validateMessage = validateDataService.validateUserData(chatId, inputText);
             if (validateMessage.getText().startsWith(REGISTRATION_NUMBER_MESSAGE.getMessage()
                     .substring(START_MESSAGE_SYMBOL, END_MESSAGE_SYMBOL))) {
-                validateMessage = processRegistrationNumber(chat, chatId, inputText);
+                validateMessage = getRegistrationNumberMessage(chat, chatId, inputText);
             } else if (validateMessage.getText().startsWith(CERTIFICATE_NUMBER_MESSAGE.getMessage()
                     .substring(START_MESSAGE_SYMBOL, END_MESSAGE_SYMBOL))) {
-                validateMessage = processCertificateNumber(chat, chatId, inputText);
+                validateMessage = processDataService.processCertificateNumber(chat, chatId, inputText);
             } else if (validateMessage.getText().startsWith(CAPTCHA_VALUE_MESSAGE.getMessage()
                     .substring(START_MESSAGE_SYMBOL, END_MESSAGE_SYMBOL))) {
-                validateMessage = processCaptcha(chat, chatId, inputText);
+                validateMessage = processDataService.processCaptcha(chat, chatId, inputText);
             }
             return isBlank(validateMessage.getText())
                     ? new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage())
@@ -70,81 +74,25 @@ public class MessageHandler {
         }
     }
 
-    private SendMessage getStartMessage(String chatId) {
-        SendMessage sendMessage = new SendMessage(chatId, START_MESSAGE.getMessage());
-        sendMessage.enableMarkdown(true);
-        sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
-        return sendMessage;
-    }
-
-    private SendMessage getDataMessage(Chat chat, String chatId) {
-        var carId = carService.findCarIdWithFullDataAndReadyForSend(chat.getId());
+    private SendMessage getSendRequestMessage(Chat chat, String chatId) {
+        var carId = carService.findCarIdWithFullDataAndLastUpdateDate(chat.getId());
         var sendMessage = isNull(carId)
-                ? new SendMessage(chatId, START_MESSAGE.getMessage())
-                : sendRequestToPlatform(chatId, carId);
+                ? generateSendMessageWithKeyboard(chatId, START_MESSAGE.getMessage(),
+                keyboardMaker.getHelpMenuKeyboard())
+                : sendRequestToGibdd(chatId, carId);
         sendMessage.enableMarkdown(true);
-        sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
+        sendMessage.setReplyMarkup(keyboardMaker.getHelpMenuKeyboard());
         return sendMessage;
     }
 
-    private SendMessage getHelpMessage(String chatId) {
-        SendMessage sendMessage = new SendMessage(chatId, HELP_MESSAGE.getMessage());
-        sendMessage.enableMarkdown(true);
-        sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
-        return sendMessage;
+    private SendMessage sendRequestToGibdd(String chatId, Long carId) {
+        requestService.sendRequestWithCarDataToParser(carId);
+        return generateSendMessageWithKeyboard(chatId, SUCCESS_DATA_SENDING.getMessage(),
+                keyboardMaker.getHelpMenuKeyboard());
     }
 
-    private SendMessage sendRequestToPlatform(String chatId, Long id) {
-        requestProcessService.sendRequestToGibddWithCarData(id);
-        return new SendMessage(chatId, SUCCESS_DATA_SENDING.getMessage());
+    private SendMessage getRegistrationNumberMessage(Chat chat, String chatId, String registrationNumber) {
+        return processDataService.processRegistrationNumber(chat, chatId, registrationNumber);
     }
 
-    private SendMessage processRegistrationNumber(Chat chat, String chatId, String inputText) {
-        SendMessage result;
-        var existCarWithoutCertificateNumber = carService.findCarWithoutCertificateNumber();
-        if (existCarWithoutCertificateNumber.isEmpty()) {
-            var existCar = carService.findCarByRegistrationNumber(inputText);
-            if (existCar.isEmpty()) {
-                chatService.saveRegistrationNumber(chat, inputText);
-                log.info("RegistrationNumber is: {}", inputText);
-                result = new SendMessage(chatId, REGISTRATION_NUMBER_MESSAGE.getMessage());
-            } else {
-                result = new SendMessage(chatId, EXCEPTION_EXISTING_REGISTRATION_NUMBER.getMessage());
-            }
-        } else {
-            result = new SendMessage(chatId, EXCEPTION_EXISTING_REQUEST.getMessage());
-        }
-        return result;
-    }
-
-    private SendMessage processCertificateNumber(Chat chat, String chatId, String inputText) {
-        SendMessage result;
-        var existCar = carService.findCarByChatIdAndCertificateNumberIsNull(chat.getId());
-        if (existCar.isPresent()) {
-            existCar.ifPresent(car -> {
-                        chatService.saveCertificateNumber(chat, car, inputText);
-                        log.info("CertificateNumber is: {}", inputText);
-                    }
-            );
-            result = new SendMessage(chatId, CERTIFICATE_NUMBER_MESSAGE.getMessage());
-        } else {
-            result = isNull(carService.findCarIdWithFullDataAndReadyForSend(chat.getId()))
-                    ? new SendMessage(chatId, EXCEPTION_CERTIFICATE_BEFORE_REGISTRATION.getMessage())
-                    : new SendMessage(chatId, READY_DATA_MESSAGE.getMessage());
-        }
-        return result;
-    }
-
-    private SendMessage processCaptcha(Chat chat, String chatId, String inputText) {
-        SendMessage result;
-        var carId = carService.findCarIdWithFullDataAndCaptchaIsWaitingStatus(chat.getId());
-        if (!isNull(carId)) {
-            requestProcessService.increaseCaptchaAttempt(carId);
-            requestProcessService.sendRequestToGibddWithCaptchaValue(carId, inputText);
-            result = new SendMessage(chatId, CAPTCHA_VALUE_MESSAGE.getMessage());
-        } else {
-            result = new SendMessage(chatId, EXCEPTION_CAPTCHA_WAITING_REQUEST.getMessage());
-        }
-        return result;
-    }
 }

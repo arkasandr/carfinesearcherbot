@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import ru.arkasandr.carfinesearcher.model.Car;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
@@ -34,7 +35,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             + " where ch.id = :id "
             + " and c.registrationNumber is not null "
             + " and c.certificateNumber is not null "
-            + " and r.status = ?#{T(ru.arkasandr.carfinesearcher.model.enums.RequestStatus).CAPTCHA_IS_WAITING}")
+            + " and r.status = ?#{T(ru.arkasandr.carfinesearcher.model.enums.RequestStatus).CAPTCHA_IS_WAITING}"
+            + " and r.requestDate = (SELECT MAX(r.requestDate) from r) ")
     Long findCarIdWithFullDataAndCaptchaIsWaitingStatus(@Param("id") Long id);
 
     @Query(nativeQuery = true, value = " select * from car c "
@@ -53,5 +55,22 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             + " and c.registrationNumber is not null "
             + " and c.certificateNumber is not null "
             + " and r.status = ?#{T(ru.arkasandr.carfinesearcher.model.enums.RequestStatus).READY_FOR_SEND}")
-    Long findCarIdWithFullDataAndReadyForSend(@Param("id") Long id);
+    Long findCarIdByFullDataAndReadyForSend(@Param("id") Long id);
+
+    @Query(value = " select c.id from Car c "
+            + " left join c.chat ch "
+            + " where ch.id = :id "
+            + " and c.registrationNumber is not null "
+            + " and c.certificateNumber = :certificateNumber "
+            + " and c.updateDate = (SELECT MAX(c.updateDate) from c) ")
+    Long findCarIdByCertificateNumberAndLastUpdateDate(@Param("id") Long id,
+                                                       @Param("certificateNumber") String certificateNumber);
+
+    @Query(value = " select c.id from Car c "
+            + " left join c.chat ch "
+            + " where ch.id = :id "
+            + " and c.registrationNumber is not null "
+            + " and c.certificateNumber is not null "
+            + " and c.updateDate = (SELECT MAX(c.updateDate) from c) ")
+    Long findCarIdWithFullDataAndLastUpdateDate(@Param("id") Long id);
 }

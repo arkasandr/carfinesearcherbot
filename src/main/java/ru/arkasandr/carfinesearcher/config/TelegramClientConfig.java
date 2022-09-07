@@ -12,13 +12,13 @@ import ru.arkasandr.carfinesearcher.telegram.handler.MessageHandler;
 public class TelegramClientConfig {
 
     @Value("${telegram.webhook}")
-    String webhookPath;
+    private String webhookPath;
 
     @Value("${telegram.name}")
-    String botName;
+    private String botName;
 
     @Value("${telegram.token}")
-    String botToken;
+    private String botToken;
 
     @Bean
     public SetWebhook setWebhookInstance() {
