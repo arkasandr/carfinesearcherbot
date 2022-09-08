@@ -34,6 +34,9 @@ public class Chat {
     @ToString.Include
     private String userName;
 
+    @ToString.Include
+    private Integer maxRequestAttempt;
+
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
     private Set<Car> chatCars;
 

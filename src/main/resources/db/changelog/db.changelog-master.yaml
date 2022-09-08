@@ -11,4 +11,6 @@ databaseChangeLog:
       file: db/changelog/changes/20220831172000__add_request_captcha_attempt_column.yaml
   - include:
       file: db/changelog/changes/20220905160300__add_car_update_date_column.yaml
+  - include:
+      file: db/changelog/changes/20220908143100__add_chat_max_request_attempt_column.yaml
 

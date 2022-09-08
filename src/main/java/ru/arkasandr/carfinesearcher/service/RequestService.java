@@ -5,14 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.arkasandr.carfinesearcher.model.Car;
 import ru.arkasandr.carfinesearcher.model.GibddRequest;
 import ru.arkasandr.carfinesearcher.repository.GibddRequestRepository;
 import ru.arkasandr.carfinesearcher.service.message.MessageService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Comparator;
-import java.util.Set;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Objects.isNull;
@@ -110,5 +108,10 @@ public class RequestService {
             result = requestRepository.save(existRequest);
         }
         return result;
+    }
+
+    @Transactional
+    public boolean isDailyRequestsLimit(Long chatId) {
+        return requestRepository.isDailyRequestsLimit(chatId);
     }
 }

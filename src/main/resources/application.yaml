@@ -12,6 +12,7 @@ gibdd:
     url: https://xn--90adear.xn--p1ai/check/fines
     screens: ${SCREENS:C:\\projects\\carfinesearcherbot\\screenshots\\error_}
   maxCaptchaAttempt: 3
+  maxDailyRequestAttempt: 5
 
 spring:
   jpa:
@@ -65,6 +66,6 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-    rolling-file-name: ${LOG_DIR:/logs}/${LOG_NAME:LogXMLProcess}-%d{yyyy-MM-dd}.%i.log
+    rolling-file-name: ${LOG_DIR:C:\\projects\\carfinesearcherbot\\logs}/${LOG_NAME:LogCarFineSearcherBot}-%d{yyyy-MM-dd}.%i.log
   file:
-    name: ${LOG_DIR:/logs}/${LOG_NAME:LogXMLProcess}.log
+    name: ${LOG_DIR:C:\\projects\\carfinesearcherbot\\logs}/${LOG_NAME:LogCarFineSearcherBot}.log
