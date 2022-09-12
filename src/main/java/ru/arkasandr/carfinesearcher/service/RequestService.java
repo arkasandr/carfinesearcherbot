@@ -5,14 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.arkasandr.carfinesearcher.model.Car;
 import ru.arkasandr.carfinesearcher.model.GibddRequest;
 import ru.arkasandr.carfinesearcher.repository.GibddRequestRepository;
 import ru.arkasandr.carfinesearcher.service.message.MessageService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Comparator;
-import java.util.Set;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Objects.isNull;
@@ -35,9 +33,9 @@ public class RequestService {
     Integer maxCaptchaAttempt;
 
     @Transactional
-    public GibddRequest saveReadyForSendRequest(Long id) {
-        var existCar = carService.findCarWithRequestById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Запись о ТС с id = " + id + " отсутствует!"));
+    public GibddRequest saveReadyForSendRequest(String chatId) {
+        var existCar = carService.findCarWithLastUpdateDateByChatId(toLong(chatId))
+                .orElseThrow(() -> new EntityNotFoundException("Запись о ТС с chatId = " + chatId + " отсутствует!"));
         var request = GibddRequest.builder()
                 .createDate(now())
                 .status(READY_FOR_SEND)
@@ -60,7 +58,8 @@ public class RequestService {
 
     @Transactional
     public void sendRequestWithCarDataToParser(Long carId) {
-        var sendingRequest = saveReadyForSendRequest(carId);
+        var sendingRequest = requestRepository.findReadyForSendRequestByCarId(carId)
+                .orElseThrow(() -> new EntityNotFoundException("Запрос с carId = " + carId + " отсутствует!"));
         var existCar = carService.findCarWithRequestById(carId)
                 .orElseThrow(() -> new EntityNotFoundException("Запись о ТС с id = " + carId + " отсутствует!"));
         messageService.sendMessageToQueueWithCarData(existCar, sendingRequest);
@@ -110,5 +109,21 @@ public class RequestService {
             result = requestRepository.save(existRequest);
         }
         return result;
+    }
+
+    @Transactional
+    public boolean isDailyRequestsLimit(Long chatId) {
+        return requestRepository.isDailyRequestsLimit(chatId);
+    }
+
+    @Transactional
+    public boolean isCurrentRequestsLimit(Long chatId) {
+        return requestRepository.isCurrentRequestsLimit(chatId);
+    }
+
+    @Transactional
+    public GibddRequest findByChatId(String chatId) {
+        return requestRepository.findByChatId(toLong(chatId))
+                .orElseThrow(() -> new EntityNotFoundException("Запрос с chatId = " + chatId + " отсутствует!"));
     }
 }

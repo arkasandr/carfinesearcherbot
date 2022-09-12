@@ -2,17 +2,15 @@ package ru.arkasandr.carfinesearcher.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.arkasandr.carfinesearcher.model.Car;
 import ru.arkasandr.carfinesearcher.model.Chat;
-import ru.arkasandr.carfinesearcher.model.GibddRequest;
 import ru.arkasandr.carfinesearcher.repository.ChatRepository;
-import ru.arkasandr.carfinesearcher.repository.GibddRequestRepository;
 
 import static java.time.LocalDateTime.now;
-import static ru.arkasandr.carfinesearcher.model.enums.RequestStatus.READY_FOR_SEND;
 
 @Service
 @Slf4j
@@ -22,6 +20,9 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final CarService carService;
 
+    @Value("${gibdd.maxDailyRequestAttempt}")
+    Integer maxDailyRequestAttempt;
+
     @Transactional
     public Chat saveChatFromMessage(Message message) {
         var chat = Chat.builder()
@@ -29,6 +30,7 @@ public class ChatService {
                 .firstName(message.getChat().getFirstName())
                 .lastName(message.getChat().getLastName())
                 .userName(message.getChat().getUserName())
+                .maxRequestAttempt(maxDailyRequestAttempt)
                 .build();
         return chatRepository.save(chat);
     }

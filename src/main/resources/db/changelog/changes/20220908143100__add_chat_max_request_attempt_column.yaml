@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - preConditions:
+      - runningAs:
+          username: postgres
+
+  - changeSet:
+      id: 7
+      author: Arkasandr
+      changes:
+        - addColumn:
+            tableName: CHAT
+            columns:
+              - column:
+                  name: max_request_attempt
+                  type: int
+
