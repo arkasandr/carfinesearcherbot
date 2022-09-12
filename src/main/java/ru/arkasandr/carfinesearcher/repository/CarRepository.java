@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import ru.arkasandr.carfinesearcher.model.Car;
 
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
@@ -80,4 +79,10 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             + " and c.registrationNumber is not null "
             + " and c.updateDate = (SELECT MAX(c.updateDate) from c) ")
     Optional<Car> findCarWithRegistrationNumberAndLastUpdateDate(@Param("id") Long id);
+
+    @Query(value = " select c from Car c "
+            + " left join c.chat ch "
+            + " where ch.chatId = :chatId "
+            + " and c.updateDate = (SELECT MAX(c.updateDate) from c) ")
+    Optional<Car> findCarWithLastUpdateDateByChatId(@Param("chatId") Long chatId);
 }

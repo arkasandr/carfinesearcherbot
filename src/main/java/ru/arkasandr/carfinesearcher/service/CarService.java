@@ -70,4 +70,9 @@ public class CarService {
     public Optional<Car> findCarWithRegistrationNumberAndLastUpdateDate(Long id) {
         return carRepository.findCarWithRegistrationNumberAndLastUpdateDate(id);
     }
+
+    @Transactional(readOnly = true)
+    public Optional<Car> findCarWithLastUpdateDateByChatId(Long chatId) {
+        return carRepository.findCarWithLastUpdateDateByChatId(chatId);
+    }
 }
