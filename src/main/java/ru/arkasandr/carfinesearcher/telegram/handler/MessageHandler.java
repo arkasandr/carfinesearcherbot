@@ -48,12 +48,15 @@ public class MessageHandler {
         log.debug("Message text is: {}", inputText);
         if (inputText == null) {
             throw new IllegalArgumentException();
-        } else if (inputText.equals(USER_START)) {
+        }
+        if (inputText.equals(USER_START)) {
             return generateSendMessageWithKeyboard(chatId, START_MESSAGE.getMessage(),
                     keyboardMaker.getHelpMenuKeyboard());
-        } else if (inputText.equals(SENT_BUTTON.getButtonName())) {
+        }
+        if (inputText.equals(SENT_BUTTON.getButtonName())) {
             return getSendRequestMessage(chat, chatId);
-        } else if (inputText.equals(HELP_BUTTON.getButtonName())) {
+        }
+        if (inputText.equals(HELP_BUTTON.getButtonName())) {
             return generateSendMessageWithKeyboard(chatId, HELP_MESSAGE.getMessage(),
                     keyboardMaker.getHelpMenuKeyboard());
         } else {

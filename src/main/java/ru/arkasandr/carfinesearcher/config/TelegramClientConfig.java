@@ -1,28 +1,23 @@
 package ru.arkasandr.carfinesearcher.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Data;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
+import ru.arkasandr.carfinesearcher.config.props.TelegramProperties;
 import ru.arkasandr.carfinesearcher.telegram.CarFineSearchBot;
 import ru.arkasandr.carfinesearcher.telegram.handler.CallbackQueryHandler;
 import ru.arkasandr.carfinesearcher.telegram.handler.MessageHandler;
 
 @Configuration
+@Data
 public class TelegramClientConfig {
 
-    @Value("${telegram.webhook}")
-    private String webhookPath;
-
-    @Value("${telegram.name}")
-    private String botName;
-
-    @Value("${telegram.token}")
-    private String botToken;
+    private final TelegramProperties telegramProperties;
 
     @Bean
     public SetWebhook setWebhookInstance() {
-        return SetWebhook.builder().url(webhookPath).build();
+        return SetWebhook.builder().url(telegramProperties.getWebhook()).build();
     }
 
     @Bean
@@ -30,9 +25,9 @@ public class TelegramClientConfig {
                                             MessageHandler messageHandler,
                                             CallbackQueryHandler callbackQueryHandler) {
         CarFineSearchBot bot = new CarFineSearchBot(setWebhook, messageHandler, callbackQueryHandler);
-        bot.setBotPath(webhookPath);
-        bot.setBotUsername(botName);
-        bot.setBotToken(botToken);
+        bot.setBotPath(telegramProperties.getWebhook());
+        bot.setBotUsername(telegramProperties.getName());
+        bot.setBotToken(telegramProperties.getToken());
         return bot;
     }
 }

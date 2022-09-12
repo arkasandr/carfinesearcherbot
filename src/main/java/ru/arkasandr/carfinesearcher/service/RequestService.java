@@ -2,9 +2,9 @@ package ru.arkasandr.carfinesearcher.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.arkasandr.carfinesearcher.config.props.GibddProperties;
 import ru.arkasandr.carfinesearcher.model.GibddRequest;
 import ru.arkasandr.carfinesearcher.repository.GibddRequestRepository;
 import ru.arkasandr.carfinesearcher.service.message.MessageService;
@@ -28,9 +28,6 @@ public class RequestService {
     private final CarService carService;
     private final GibddRequestRepository requestRepository;
     private final MessageService messageService;
-
-    @Value("${gibdd.maxCaptchaAttempt}")
-    Integer maxCaptchaAttempt;
 
     @Transactional
     public GibddRequest saveReadyForSendRequest(String chatId) {

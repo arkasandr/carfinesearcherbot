@@ -2,10 +2,10 @@ package ru.arkasandr.carfinesearcher.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import ru.arkasandr.carfinesearcher.config.props.GibddProperties;
 import ru.arkasandr.carfinesearcher.model.Car;
 import ru.arkasandr.carfinesearcher.model.Chat;
 import ru.arkasandr.carfinesearcher.repository.ChatRepository;
@@ -19,9 +19,7 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
     private final CarService carService;
-
-    @Value("${gibdd.maxDailyRequestAttempt}")
-    Integer maxDailyRequestAttempt;
+    private final GibddProperties gibddProperties;
 
     @Transactional
     public Chat saveChatFromMessage(Message message) {
@@ -30,7 +28,7 @@ public class ChatService {
                 .firstName(message.getChat().getFirstName())
                 .lastName(message.getChat().getLastName())
                 .userName(message.getChat().getUserName())
-                .maxRequestAttempt(maxDailyRequestAttempt)
+                .maxRequestAttempt(gibddProperties.getMaxDailyRequestAttempt())
                 .build();
         return chatRepository.save(chat);
     }
