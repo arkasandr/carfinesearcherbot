@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.arkasandr.carfinesearcher.config.props.GibddProperties;
 import ru.arkasandr.carfinesearcher.model.GibddRequest;
 import ru.arkasandr.carfinesearcher.repository.GibddRequestRepository;
 import ru.arkasandr.carfinesearcher.service.message.MessageService;
@@ -118,6 +117,10 @@ public class RequestService {
         return requestRepository.isCurrentRequestsLimit(chatId);
     }
 
+    @Transactional
+    public boolean isCurrentSendingLimit(Long chatId) {
+        return requestRepository.isCurrentSendingLimit(chatId);
+    }
     @Transactional
     public GibddRequest findByChatId(String chatId) {
         return requestRepository.findByChatId(toLong(chatId))
