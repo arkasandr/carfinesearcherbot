@@ -35,33 +35,6 @@ spring:
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
-  rabbitmq:
-    host: localhost
-    port: 5672
-    password: fine
-    username: fine
-    exchange_client: clientRequestFinesExchange
-    queue_client: ru.arkasandr.fine.client
-    routingkey_client: ru.arkasandr.fine.client.rk
-
-    exchange_server: serverResponseFinesExchange
-    queue_server: ru.arkasandr.fine.server
-    routingkey_server: ru.arkasandr.fine.server.rk
-
-    exchange_captcha: captchaRequestFinesExchange
-    queue_captcha: ru.arkasandr.fine.captcha
-    routingkey_captcha: ru.arkasandr.fine.captcha.rk
-
-    exchange_captcha_value: captchaValueResponseFinesExchange
-    queue_captcha_value: ru.arkasandr.fine.captcha.value
-    routingkey_captcha_value: ru.arkasandr.fine.captcha.value.rk
-
-    exchange_answer: answerFinesExchange
-    queue_answer: ru.arkasandr.fine.answer
-    routingkey_answer: ru.arkasandr.fine.answer.rk
-
-
-
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
@@ -69,3 +42,30 @@ logging:
     rolling-file-name: ${LOG_DIR:C:\\projects\\carfinesearcherbot\\logs}/${LOG_NAME:LogCarFineSearcherBot}-%d{yyyy-MM-dd}.%i.log
   file:
     name: ${LOG_DIR:C:\\projects\\carfinesearcherbot\\logs}/${LOG_NAME:LogCarFineSearcherBot}.log
+
+rabbitmq:
+  host: localhost
+  port: 5672
+  password: fine
+  username: fine
+  queues:
+    clientRequest:
+      exchange: clientRequestFinesExchange
+      queue: ru.arkasandr.fine.client
+      routingkey: ru.arkasandr.fine.client.rk
+    serverResponse:
+      exchange: serverResponseFinesExchange
+      queue: ru.arkasandr.fine.server
+      routingkey: ru.arkasandr.fine.server.rk
+    captchaRequest:
+      exchange: captchaRequestFinesExchange
+      queue: ru.arkasandr.fine.captcha
+      routingkey: ru.arkasandr.fine.captcha.rk
+    captchaValueResponse:
+      exchange: captchaValueResponseFinesExchange
+      queue: ru.arkasandr.fine.captcha.value
+      routingkey: ru.arkasandr.fine.captcha.value.rk
+    answerFines:
+      exchange: answerFinesExchange
+      queue: ru.arkasandr.fine.answer
+      routingkey: ru.arkasandr.fine.answer.rk

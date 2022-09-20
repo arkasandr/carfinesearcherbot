@@ -12,6 +12,7 @@ import ru.arkasandr.carfinesearcher.telegram.keyboards.ReplyKeyboardMaker;
 
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.math.NumberUtils.toLong;
 import static ru.arkasandr.carfinesearcher.service.util.GenerateSendMessageUtil.generateSendMessageWithKeyboard;
 import static ru.arkasandr.carfinesearcher.telegram.constants.BotMessageEnum.*;
 import static ru.arkasandr.carfinesearcher.telegram.constants.ButtonNameEnum.HELP_BUTTON;
@@ -48,12 +49,15 @@ public class MessageHandler {
         log.debug("Message text is: {}", inputText);
         if (inputText == null) {
             throw new IllegalArgumentException();
-        } else if (inputText.equals(USER_START)) {
+        }
+        if (inputText.equals(USER_START)) {
             return generateSendMessageWithKeyboard(chatId, START_MESSAGE.getMessage(),
                     keyboardMaker.getHelpMenuKeyboard());
-        } else if (inputText.equals(SENT_BUTTON.getButtonName())) {
+        }
+        if (inputText.equals(SENT_BUTTON.getButtonName())) {
             return getSendRequestMessage(chat, chatId);
-        } else if (inputText.equals(HELP_BUTTON.getButtonName())) {
+        }
+        if (inputText.equals(HELP_BUTTON.getButtonName())) {
             return generateSendMessageWithKeyboard(chatId, HELP_MESSAGE.getMessage(),
                     keyboardMaker.getHelpMenuKeyboard());
         } else {
@@ -90,13 +94,16 @@ public class MessageHandler {
     }
 
     private SendMessage sendRequestToGibdd(String chatId, Long carId) {
-        requestService.sendRequestWithCarDataToParser(carId);
-        return generateSendMessageWithKeyboard(chatId, SUCCESS_DATA_SENDING.getMessage(),
+        if (requestService.isCurrentSendingLimit(toLong(chatId))) {
+            requestService.sendRequestWithCarDataToParser(carId);
+            return generateSendMessageWithKeyboard(chatId, SUCCESS_DATA_SENDING.getMessage(),
+                    keyboardMaker.getHelpMenuKeyboard());
+        }
+        return generateSendMessageWithKeyboard(chatId, EXCEPTION_MULTIPLY_SENDING.getMessage(),
                 keyboardMaker.getHelpMenuKeyboard());
     }
 
     private SendMessage getRegistrationNumberMessage(Chat chat, String chatId, String registrationNumber) {
         return processDataService.processRegistrationNumber(chat, chatId, registrationNumber);
     }
-
 }
