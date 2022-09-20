@@ -48,6 +48,7 @@ public interface GibddRequestRepository extends JpaRepository<GibddRequest, UUID
     @Query(value = " select r from GibddRequest r "
             + " left join Car c on c.id = r.car.id "
             + " where c.updateDate = (SELECT MAX(c.updateDate) from c) "
+            + " and r.status = ?#{T(ru.arkasandr.carfinesearcher.model.enums.RequestStatus).READY_FOR_SEND} "
             + " and c.id = :carId ")
     Optional<GibddRequest> findReadyForSendRequestByCarId(@Param("carId") Long carId);
 
