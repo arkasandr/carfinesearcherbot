@@ -68,10 +68,10 @@ public class MessageHandler {
             } else if (validateMessage.getText().startsWith(CERTIFICATE_NUMBER_MESSAGE.getMessage()
                     .substring(START_MESSAGE_SYMBOL, END_MESSAGE_SYMBOL))) {
                 validateMessage = processDataService.processCertificateNumber(chat, chatId, inputText);
-                if (CERTIFICATE_NUMBER_MESSAGE.getMessage().equals(validateMessage.getText())
-                        || READY_DATA_MESSAGE.getMessage().equals(validateMessage.getText())) {
-                    requestService.saveReadyForSendRequest(chatId);
-                }
+//                if (CERTIFICATE_NUMBER_MESSAGE.getMessage().equals(validateMessage.getText())
+//                        || READY_DATA_MESSAGE.getMessage().equals(validateMessage.getText())) {
+//                    requestService.saveReadyForSendRequest(chatId);
+//                }
             } else if (validateMessage.getText().startsWith(CAPTCHA_VALUE_MESSAGE.getMessage()
                     .substring(START_MESSAGE_SYMBOL, END_MESSAGE_SYMBOL))) {
                 validateMessage = processDataService.processCaptcha(chat, chatId, inputText);

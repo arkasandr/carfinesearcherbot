@@ -57,8 +57,8 @@ public class CarService {
     }
 
     @Transactional(readOnly = true)
-    public Long findCarIdByCertificateNumberAndLastUpdateDate(Long id, String certificateNumber) {
-        return carRepository.findCarIdByCertificateNumberAndLastUpdateDate(id, certificateNumber);
+    public Optional<Car> findCarByCertificateNumberAndLastUpdateDate(Long id, String certificateNumber) {
+        return carRepository.findCarByCertificateNumberAndLastUpdateDate(id, certificateNumber);
     }
 
     @Transactional(readOnly = true)
