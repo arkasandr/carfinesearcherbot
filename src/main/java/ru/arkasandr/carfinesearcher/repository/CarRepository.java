@@ -56,14 +56,16 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             + " and r.status = ?#{T(ru.arkasandr.carfinesearcher.model.enums.RequestStatus).READY_FOR_SEND}")
     Long findCarIdByFullDataAndReadyForSend(@Param("id") Long id);
 
-    @Query(value = " select c.id from Car c "
+    @Query(value = " select c from Car c "
             + " left join c.chat ch "
+            + " left join c.request r "
             + " where ch.id = :id "
             + " and c.registrationNumber is not null "
             + " and c.certificateNumber = :certificateNumber "
+         //   + " and r.status is null "
             + " and c.updateDate = (SELECT MAX(c.updateDate) from c) ")
-    Long findCarIdByCertificateNumberAndLastUpdateDate(@Param("id") Long id,
-                                                       @Param("certificateNumber") String certificateNumber);
+    Optional<Car> findCarByCertificateNumberAndLastUpdateDate(@Param("id") Long id,
+                                                              @Param("certificateNumber") String certificateNumber);
 
     @Query(value = " select c.id from Car c "
             + " left join c.chat ch "
@@ -75,8 +77,11 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     @Query(value = " select c from Car c "
             + " left join c.chat ch "
+            + " left join c.request r "
             + " where ch.id = :id "
             + " and c.registrationNumber is not null "
+            + " and c.certificateNumber is null "
+            + " and r.status is null "
             + " and c.updateDate = (SELECT MAX(c.updateDate) from c) ")
     Optional<Car> findCarWithRegistrationNumberAndLastUpdateDate(@Param("id") Long id);
 
