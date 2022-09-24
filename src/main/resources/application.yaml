@@ -58,6 +58,7 @@ gibdd:
     screens: ${SCREENS:C:\\projects\\carfinesearcherbot\\screenshots\\error_}
   maxCaptchaAttempt: ${MAX_CAPTHA_ATTEMPT:3}
   maxDailyRequestAttempt: ${MAX_DAILY_REQUEST_ATTEMPT:5}
+  shedule: ${CRON:0 0/10 * * * *}
 
 rabbitmq:
   host: localhost

@@ -9,6 +9,7 @@ import ru.arkasandr.carfinesearcher.repository.GibddRequestRepository;
 import ru.arkasandr.carfinesearcher.service.message.MessageService;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collection;
 import java.util.Comparator;
 
 import static java.time.LocalDateTime.now;
@@ -121,9 +122,20 @@ public class RequestService {
     public boolean isCurrentSendingLimit(Long chatId) {
         return requestRepository.isCurrentSendingLimit(chatId);
     }
+
     @Transactional
     public GibddRequest findByChatId(String chatId) {
         return requestRepository.findByChatId(toLong(chatId))
                 .orElseThrow(() -> new EntityNotFoundException("Запрос с chatId = " + chatId + " отсутствует!"));
+    }
+
+    @Transactional
+    public void archiveDeadRequests() {
+        requestRepository.archiveDeadRequests();
+    }
+
+    @Transactional
+    public Collection<GibddRequest> findDeadRequestsIds() {
+        return requestRepository.findDeadRequestsIds();
     }
 }
