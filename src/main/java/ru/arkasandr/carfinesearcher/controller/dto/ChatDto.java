@@ -1,0 +1,1 @@
+package ru.arkasandr.carfinesearcher.controller.dto;import lombok.*;@Data@Builder@AllArgsConstructor@NoArgsConstructorpublic class ChatDto {    private Long id;    private Long chatId;    private String firstName;    private String lastName;    private String userName;    private Integer maxRequestAttempt;}
