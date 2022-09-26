@@ -63,7 +63,8 @@ public interface GibddRequestRepository extends JpaRepository<GibddRequest, UUID
 
     @Modifying
     @Query(nativeQuery = true, value = " update gibdd_request "
-            + " set status = 'DELETED' "
+            + " set status = 'DELETED', "
+            + " response_date = NOW() "
             + " where (status = 'READY_FOR_SEND' "
             + " or status = 'CAPTCHA_IS_WAITING' "
             + " or status = 'SENDING' "
