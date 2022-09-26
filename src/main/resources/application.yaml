@@ -1,20 +1,23 @@
 server:
   port: 8060
-
-telegram:
-  url: "https://api.telegram.org/"
-  webhook: ${BOT_WEBHOOK:"https://0c52-46-233-221-184.eu.ngrok.io"}
-  name: "CarFineSearcherBot"
-  token: ${BOT_TOKEN:}
-
-gibdd:
-  fines:
-    url: https://xn--90adear.xn--p1ai/check/fines
-    screens: ${SCREENS:C:\\projects\\carfinesearcherbot\\screenshots\\error_}
-  maxCaptchaAttempt: 3
-  maxDailyRequestAttempt: 5
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
 
 spring:
+  boot:
+    admin:
+      client:
+        url: http://${ADMIN_HOST:localhost:8061}
+
+  application:
+    name: carFineSearchBot
+
   jpa:
     generate-ddl: false
     show-sql: true
@@ -42,6 +45,20 @@ logging:
     rolling-file-name: ${LOG_DIR:C:\\projects\\carfinesearcherbot\\logs}/${LOG_NAME:LogCarFineSearcherBot}-%d{yyyy-MM-dd}.%i.log
   file:
     name: ${LOG_DIR:C:\\projects\\carfinesearcherbot\\logs}/${LOG_NAME:LogCarFineSearcherBot}.log
+
+telegram:
+  url: "https://api.telegram.org/"
+  webhook: ${BOT_WEBHOOK:"https://0c52-46-233-221-184.eu.ngrok.io"}
+  name: "CarFineSearcherBot"
+  token: ${BOT_TOKEN:}
+
+gibdd:
+  fines:
+    url: https://xn--90adear.xn--p1ai/check/fines
+    screens: ${SCREENS:C:\\projects\\carfinesearcherbot\\screenshots\\error_}
+  maxCaptchaAttempt: ${MAX_CAPTHA_ATTEMPT:3}
+  maxDailyRequestAttempt: ${MAX_DAILY_REQUEST_ATTEMPT:5}
+  shedule: ${CRON:0 0/10 * * * *}
 
 rabbitmq:
   host: localhost

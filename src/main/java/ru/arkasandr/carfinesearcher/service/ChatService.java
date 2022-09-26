@@ -10,6 +10,8 @@ import ru.arkasandr.carfinesearcher.model.Car;
 import ru.arkasandr.carfinesearcher.model.Chat;
 import ru.arkasandr.carfinesearcher.repository.ChatRepository;
 
+import javax.persistence.EntityNotFoundException;
+
 import static java.time.LocalDateTime.now;
 
 @Service
@@ -55,5 +57,16 @@ public class ChatService {
         car.setUpdateDate(now());
         car.setChat(chat);
         carService.save(car);
+    }
+
+    @Transactional
+    public Chat changeChatMaxRequestAttempt(Chat chat) {
+        if (chat.getChatId() != null) {
+            var existChat = chatRepository.findChatByChatId(chat.getChatId())
+                    .orElseThrow(() -> new EntityNotFoundException("Запись о чате с id = " + chat.getChatId() + " отсутствует!"));
+            existChat.setMaxRequestAttempt(chat.getMaxRequestAttempt());
+            return chatRepository.save(existChat);
+        }
+        return Chat.builder().build();
     }
 }

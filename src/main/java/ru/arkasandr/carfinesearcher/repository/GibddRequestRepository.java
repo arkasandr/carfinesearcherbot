@@ -1,11 +1,13 @@
 package ru.arkasandr.carfinesearcher.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.arkasandr.carfinesearcher.model.GibddRequest;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -58,4 +60,22 @@ public interface GibddRequestRepository extends JpaRepository<GibddRequest, UUID
             + " where c.updateDate = (SELECT MAX(c.updateDate) from c) "
             + " and ch.chatId = :chatId ")
     Optional<GibddRequest> findByChatId(@Param("chatId") Long chatId);
+
+    @Modifying
+    @Query(nativeQuery = true, value = " update gibdd_request "
+            + " set status = 'DELETED' "
+            + " where (status = 'READY_FOR_SEND' "
+            + " or status = 'CAPTCHA_IS_WAITING' "
+            + " or status = 'SENDING' "
+            + " or status = 'CAPTCHA_SENT') "
+            + " and create_date < NOW() - 1 * INTERVAL '1 hour'")
+    void archiveDeadRequests();
+
+    @Query(nativeQuery = true, value = " select * from gibdd_request "
+            + " where (status = 'READY_FOR_SEND' "
+            + " or status = 'CAPTCHA_IS_WAITING' "
+            + " or status = 'SENDING' "
+            + " or status = 'CAPTCHA_SENT') "
+            + " and create_date < NOW() - 1 * INTERVAL '1 hour'")
+    Collection<GibddRequest> findDeadRequestsIds();
 }
