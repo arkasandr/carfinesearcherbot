@@ -58,6 +58,7 @@ public interface GibddRequestRepository extends JpaRepository<GibddRequest, UUID
             + " left join Car c on c.id = r.car.id "
             + " left join Chat ch on ch.id = c.chat.id "
             + " where c.updateDate = (SELECT MAX(c.updateDate) from c) "
+            + " and r.createDate = (SELECT MAX(r.createDate) from r) "
             + " and ch.chatId = :chatId ")
     Optional<GibddRequest> findByChatId(@Param("chatId") Long chatId);
 

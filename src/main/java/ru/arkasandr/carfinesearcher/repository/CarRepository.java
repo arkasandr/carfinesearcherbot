@@ -50,7 +50,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Query(value = " select c.id from Car c "
             + " left join c.chat ch "
             + " left join c.request r "
-            + " where ch.id = :id "
+            + " where ch.chatId = :id "
             + " and c.registrationNumber is not null "
             + " and c.certificateNumber is not null "
             + " and r.status = ?#{T(ru.arkasandr.carfinesearcher.model.enums.RequestStatus).READY_FOR_SEND}")
