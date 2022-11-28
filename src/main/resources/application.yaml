@@ -1,5 +1,5 @@
 server:
-  port: 8060
+  port: 8850
 management:
   endpoints:
     web:
@@ -61,10 +61,10 @@ gibdd:
   shedule: ${CRON:0 0/10 * * * *}
 
 rabbitmq:
-  host: localhost
+  host: ${RABBIT_HOST:localhost}
   port: 5672
-  password: fine
-  username: fine
+  password: ${RABBITMQ_DEFAULT_PASS:fine}
+  username: ${RABBITMQ_DEFAULT_USER:fine}
   queues:
     clientRequest:
       exchange: clientRequestFinesExchange
