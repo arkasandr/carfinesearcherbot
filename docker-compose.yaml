@@ -1,0 +1,27 @@
+version: "3.5"
+
+services:
+  car_fine_search_bot:
+    container_name: car-fine-search-bot
+    image: arkasandr/carfinesearchbot:latest
+    environment:
+      RABBIT_HOST: 172.17.0.1/16
+      SCREENS: screens/error_
+      CRON: 0 0/10 * * * *
+      LOG_DIR: /carfinesearchbot
+      LOG_NAME: carfinesearchbot
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+    restart: always
+    build:
+      context: .
+      target: backend
+    ports:
+      - 8850:8850
+    volumes:
+      - /data/logs/carfinesearchbot:/carfinesearchbot
+      - /data/screen/carfinesearchbot:/screens
+      - /home/arkaleks/.cache/ms-playwright:/ms-playwright
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
